@@ -90,7 +90,7 @@ class scrInteractor
 			
 		double pegarX(); //captura x esquerdo
 		double pegarY(); //captura y esquerdo
-		double pegarX2() //captura x direito
+		double pegarX2(); //captura x direito
 		double pegarY2(); //captura y direito
 		bool pegarClick();  //captura se clique esquerdo
 		bool pegarClick2(); //captura se clique direito
