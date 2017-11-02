@@ -88,12 +88,6 @@ class scrInteractor
 		virtual ~scrInteractor(){} // Destrutor virtual para poder usar a função virtual para calcular o centróide
 
 			
-		double pegarX(); //captura x esquerdo
-		double pegarY(); //captura y esquerdo
-		double pegarX2(); //captura x direito
-		double pegarY2(); //captura y direito
-		bool pegarClick();  //captura se clique esquerdo
-		bool pegarClick2(); //captura se clique direito
 			
         bool Init(float xmin, float xmax, float ymin, float ymax, float near_z, float far_z);
 		
@@ -146,7 +140,7 @@ class scrInteractor
         std::string& GetScreenImageFilename();
         bool WriteScreenImage();
 		
-
+		
 	protected :
 	
 		/*Criar uma variavel centroide para armazenar o centroide =)*/

@@ -81,7 +81,7 @@ class scrInteractor
 
 		scrInteractor(int width, int height);
 
-      	bool Init(float xmin, float xmax, float ymin, float ymax, float near_z, float far_z);
+      bool Init(float xmin, float xmax, float ymin, float ymax, float near_z, float far_z);
 		bool Init (auxRect<float> rec_extents, float near_z, float far_z);
 
 		void Display();
@@ -112,14 +112,13 @@ class scrInteractor
 
 		void Calc_Rotation();
         
-		void Change_BG_Color();
-		
-		
-		
-		void SetScreenImageFilename(std::string filename);
-		std::string& GetScreenImageFilename();
-		bool WriteScreenImage();
-	  
+      void Change_BG_Color();
+      
+      
+      
+      void SetScreenImageFilename(std::string filename);
+      std::string& GetScreenImageFilename();
+      bool WriteScreenImage();
 		
 	protected :
 	

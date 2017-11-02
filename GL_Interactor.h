@@ -1,30 +1,3 @@
-#include "of.h"
-#include "ofOffPointsReader.h"
-#include "Handler.hpp" 
-#include "ColorRGBA.hpp"
-#include "Cores.h"
-#include "Point.hpp"
-#include "printof.hpp"
-#include "CommandComponent.hpp"
-#include "MyCommands.hpp"
-#include "ofVertexStarIteratorSurfaceVertex.h"
-
-//Define a malha a ser usada.
-typedef of::MyofDefault2D TTraits;
-typedef of::ofMesh<TTraits> TMesh;
-TMesh *malha;
-Handler<TMesh> meshHandler;
-
-typedef PrintOf<TTraits> TPrintOf;
-
-TPrintOf *Print;
-
-typedef MyCommands<TPrintOf> TMyCommands;
-typedef CommandComponent TAllCommands;
-
-ofVtkWriter<TTraits> writer;
-TAllCommands *allCommands;
-
 #include "scrInteractor.h"
 
 struct Coord

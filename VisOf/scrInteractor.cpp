@@ -1,6 +1,5 @@
 #include "scrInteractor.h"
 #include <stdio.h>
-#include <stdlib.h>
 #include <iostream>
 
 
@@ -9,36 +8,6 @@ using namespace std;
 
 bool scrInteractor::Normal_Change = 0;
 float* scrInteractor::Centroide = new float[3];;
-
-//EP
-double pontoX = 0.0;
-double pontoY = 0.0;
-double pontoX2 = 0.0;
-double pontoY2 = 0.0;
-
-bool scrInteractor::pegarClick(){
-	return this->mouse_left;
-}
-
-bool scrInteractor::pegarClick2(){
-	return this->mouse_right;
-}
-
-double scrInteractor::pegarX(){
-	return pontoX;
-}
-
-double scrInteractor::pegarY(){
-	return pontoY;
-}
-
-double scrInteractor::pegarX2(){
-	return pontoX2;
-}
-
-double scrIngteractor::pegarY2(){
-	return pontoY2;
-}
 
 /*====================== glButton ===================================*/
 
@@ -276,21 +245,11 @@ void scrInteractor::Mouse(int button, int state, int x, int y) /* coordena */
 		pt_mouse_old = pt_mouse;
 		pt_mouse.setValues(x, y);
 
-		if (button == GLUT_RIGHT_BUTTON){
-			double get[3]; //variavel que vai armazenar o array para ScreentoPoint
-			this->ScreenToPoint(this->pt_mouse, get); // Metodo que vai pegar as coordenadas do ponto na tela e colocar no array
-			pontoX2 = get[0]; // populando variavel do mouse com botão direito
-			pontoY2 = get[1]; // populando variavel do mouse com botão direito
-			this->mouse_right = true; //retorna que o mouse foi clicado
-		}
+		if (button == GLUT_RIGHT_BUTTON)
+			this->mouse_right = true;
+		
 		if (button == GLUT_LEFT_BUTTON)
 		{
-			double get[3];//variavel que vai armazenar o array para ScreentoPoint
-			this->ScreenToPoint(this->pt_mouse, get);
-			pontoX = get[0];  // populando variavel do mouse com botão esquerdo
-			pontoY = get[1]; // populando variavel do mouse com botão esquerdo
-			this->mouse_left = true; // retorna que o mouse foi clicado
-
 			mod_keys = glutGetModifiers();
 			if (mod_keys == GLUT_ACTIVE_SHIFT)
 			{
