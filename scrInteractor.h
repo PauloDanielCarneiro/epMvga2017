@@ -138,9 +138,20 @@ class scrInteractor
 		
         void SetScreenImageFilename(std::string filename);
         std::string& GetScreenImageFilename();
-        bool WriteScreenImage();
-	int view_list;
-	void Init_List();
+		bool WriteScreenImage();
+		
+		//[EP] ----VARIAVEIS QUE RETORNAM COORDENADAS DO CLIQUE DO MOUSE----
+		double getPX(); //captura x esquerdo
+		double getPY(); //captura y esquerdo
+		double getPXD(); //captura x direito
+		double getPYD(); //captura y direito
+		bool getMouseLeft();  //captura se clique esquerdo
+		bool getMouseRight(); //captura se clique direito
+		//[FIM]
+
+		int view_list;
+		void Init_List();
+
 	protected :
 	
 		/*Criar uma variavel centroide para armazenar o centroide =)*/

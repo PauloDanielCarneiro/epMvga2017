@@ -9,6 +9,37 @@ using namespace std;
 bool scrInteractor::Normal_Change = 0;
 float* scrInteractor::Centroide = new float[3];;
 
+//[EP] ----VARI�VEIS QUE ARMAZENAM AS COORDENADAS DO PONTO CLICADO----//
+//Clique esquerdo
+double PX = 0.0;
+double PY = 0.0;
+//Clique direito
+double PXD = 0.0;
+double PYD = 0.0;
+
+//[EP] ----RETORNA TRUE SE O BOTAO DO MOUSE FOI ACIONADO----
+bool scrInteractor::getMouseLeft()
+{
+     return this->mouse_left;
+}
+bool scrInteractor::getMouseRight()
+{
+     return this->mouse_right;
+}
+
+//[EP] ----M�TODOS RETORNAM OS PONTOS CLICADOS
+//Clique esquerdo
+double scrInteractor::getPX() {
+       return PX; }
+double scrInteractor::getPY() {
+       return PY; }
+//Clique direito
+double scrInteractor::getPXD() {
+       return PXD; }
+double scrInteractor::getPYD() {
+       return PYD; }
+//[FIM]
+
 /*====================== glButton ===================================*/
 
 /*===================================================================*/
@@ -229,9 +260,11 @@ void scrInteractor::MouseMotion(int x, int y) /* é acessada com o movimento do 
 
 	if (this->mouse_left && this->mouse_right)
 		this->Calc_Translation();
+	/*EP
 	else if (this->mouse_left && !this->mouse_right)
 		this->Calc_Rotation();
-	else if (!this->mouse_left && this->mouse_right)
+	*/
+		else if (!this->mouse_left && this->mouse_right)
 		this->Calc_Scale();
 
 	glutPostRedisplay();
@@ -255,13 +288,29 @@ void scrInteractor::Mouse(int button, int state, int x, int y) /* coordena */
 		pt_mouse.setValues(x, y);
 
 		if (button == GLUT_RIGHT_BUTTON)
-			this->mouse_right = true;
-		
-		if (button == GLUT_LEFT_BUTTON)
-		{
-			mod_keys = glutGetModifiers();
-			if (mod_keys == GLUT_ACTIVE_SHIFT)
-			{
+        {
+           //[EP] ----CAPTURA O CLIQUE DO BOTAO DIREITO----/
+           double captura[3];
+           this->ScreenToPoint(this->pt_mouse, captura);
+           PXD = captura[0];
+           PYD = captura[1];
+           this->mouse_right = true;
+           //[FIM]
+        }
+
+        if (button == GLUT_LEFT_BUTTON) 
+        {
+           //[EP] ----CAPTURA O CLIQUE DO BOTAO ESQUERDO----/
+           double captura[3];
+           this->ScreenToPoint(this->pt_mouse, captura);
+           PX = captura[0];
+           PY = captura[1];
+           this->mouse_left = true;
+           //[FIM]
+           
+           mod_keys = glutGetModifiers();
+           if (mod_keys == GLUT_ACTIVE_SHIFT) 
+           {
 				double point [3];
 				char aux_label[7];
 				char btn_label[25];
