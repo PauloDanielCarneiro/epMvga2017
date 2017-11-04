@@ -1,3 +1,31 @@
+//[EP] ----INSERIDO PARA FAZER ENXERGAR A MALHA----
+#include "of.h"
+#include "ofOffPointsReader.h"
+#include "Handler.hpp" 
+#include "ColorRGBA.hpp"
+#include "Cores.h"
+#include "Point.hpp"
+#include "printof.hpp"
+#include "CommandComponent.hpp"
+#include "MyCommands.hpp"
+#include "ofVertexStarIteratorSurfaceVertex.h"
+
+typedef of::MyofDefault2D TTraits;
+typedef of::ofMesh<TTraits> TMesh;
+TMesh *malha;
+Handler<TMesh> meshHandler;
+
+typedef PrintOf<TTraits> TPrintOf;
+
+TPrintOf *Print;
+
+typedef MyCommands<TPrintOf> TMyCommands;
+typedef CommandComponent TAllCommands;
+
+of::ofVtkWriter<TTraits> writer;
+TAllCommands *allCommands;
+//[FIM] ------------------------------
+
 #include "scrInteractor.h"
 
 struct Coord
@@ -31,6 +59,11 @@ void MouseMotion(int x, int y)
 void Mouse(int button, int state, int x, int y)
 {
 	Interactor->Mouse(button, state, x, y);
+
+	//[EP] ----ATUALIZA A TELA TODA A VEZ QUE CLICA----/
+    Interactor->Refresh_List();
+	glutPostRedisplay();
+	//[FIM]
 }
 
 void Keyboard(unsigned char key, int x, int y)
