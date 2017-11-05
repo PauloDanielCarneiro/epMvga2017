@@ -295,7 +295,7 @@ int main(int *argc, char **argv)
   ofVtkWriter<MyofDefault2D> writer;
   Interactor->setDraw(RenderScene);
 	meshHandler.Set(new TMesh());
-      char *fileBrasil = "/home/helton/Downloads/ep_mvga/epMvga2017/Brasil.off";
+      char *fileBrasil = "/home/paulo/Documents/epMvga2017/Brasil.off";
 
      
     reader.readOffFile(fileBrasil);
