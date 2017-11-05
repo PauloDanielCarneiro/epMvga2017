@@ -4,10 +4,15 @@
 
 //************** Includes ***************************
 #include "TrackBall.h"
-#include <glut.h>
-#include <gl\gl.h>
+#include <GL/glew.h>
+#include <GL/freeglut.h>
 #include <string>
+#include <cstring>
+using namespace std;
 //************** Defines de valores e funcoes ***************************
+
+
+
 
 enum render_mode{RUSER , RWIRE, RPOINT, RSHADING, RSHADING_WIRE};
 
@@ -64,8 +69,9 @@ class glButton
 		bool	state;
 		bool    visible;
 		float * text_color;
-        float * btn_color;
+      float * btn_color;
 		char  *	label;
+
 };
 
 
@@ -83,9 +89,9 @@ class scrInteractor
 
 			
 			
-        bool Init(float xmin, float xmax, float ymin, float ymax, float near_z, float far_z);
+        bool Init(float xmin, float xmax, float ymin, float ymax, float near_z, float far_z, int *argc, char **argv);
 		
-        bool Init (auxRect<float> rec_extents, float near_z, float far_z);
+        bool Init (auxRect<float> rec_extents, float near_z, float far_z,int *argc, char **argv);
 
 		void Display();
 
@@ -132,8 +138,7 @@ class scrInteractor
 		
         void SetScreenImageFilename(std::string filename);
         std::string& GetScreenImageFilename();
-        bool WriteScreenImage();
-		
+		bool WriteScreenImage();
 		
 		//[EP] ----VARIAVEIS QUE RETORNAM COORDENADAS DO CLIQUE DO MOUSE----
 		double getPX(); //captura x esquerdo
@@ -143,8 +148,7 @@ class scrInteractor
 		bool getMouseLeft();  //captura se clique esquerdo
 		bool getMouseRight(); //captura se clique direito
 		//[FIM]
-		
-		
+
 	protected :
 	
 		/*Criar uma variavel centroide para armazenar o centroide =)*/
@@ -167,7 +171,7 @@ class scrInteractor
 		void Draw_String(char * text);
 
 		void Draw_Axis();
-
+		
 		void Init_List();
 	
 		void Calc_Scale();
@@ -175,6 +179,8 @@ class scrInteractor
 		void Calc_Translation();
 
 		void Initial_Translation ();
+        
+        void Initial_Rotation();
 
 		void Init_Lights();
 
@@ -238,7 +244,7 @@ class scrInteractor
 		render_mode render;
 
 		TrackBall trackball;
-		
+
 };
 
 

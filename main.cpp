@@ -1,3 +1,15 @@
+#ifdef HAVE_CONFIG_H
+#include <config.h>
+#endif
+#include <list>
+#include <cstdlib>
+#include <stdio.h>
+#include <iostream>
+#include <GL/glew.h>
+#include <GL/freeglut.h>
+#include <time.h>
+//#include <functional>
+
 #include "of.h"
 #include "ofOffPointsReader.h"
 #include "Handler.hpp" 
@@ -13,16 +25,6 @@
 
 #include "ofVertexStarIteratorSurfaceVertex.h"
 
-#ifdef HAVE_CONFIG_H
-#include <config.h>
-#endif
-#include <list>
-#include <cstdlib>
-#include <stdio.h>
-#include <iostream>
-
-#include <glut.h>
-#include <time.h>
 
 clock_t start_insert;
 clock_t end_insert;
@@ -36,10 +38,6 @@ using namespace of;
 
 //Define o tamanho da tela.
 scrInteractor *Interactor = new scrInteractor(800, 600);
-
-
-//[EP] REMOVIDO DAQUI E INSERIDO EM GL_Interactor.h
-/*
 
 //Define a malha a ser usada.
 typedef of::MyofDefault2D TTraits;
@@ -56,9 +54,6 @@ typedef CommandComponent TAllCommands;
 
 ofVtkWriter<TTraits> writer;
 TAllCommands *allCommands;
-
-*/
-//[FIM]
 
 //##################################################################//
 
@@ -290,40 +285,42 @@ void HandleKeyboard(unsigned char key, int x, int y){
 	Interactor->Refresh_List();
 	glutPostRedisplay();
 }
-
 using namespace std;
 
-int main(int argc, char *argv[])
+int main(int *argc, char **argv)
 {
-    ofRuppert2D<MyofDefault2D> ruppert;
-    ofPoints2DReader<MyofDefault2D> reader;
-    ofVtkWriter<MyofDefault2D> writer;
-    Interactor->setDraw(RenderScene);
-    meshHandler.Set(new TMesh());
 
-  
-    reader.readOffFile("Brasil.off");
+  ofRuppert2D<MyofDefault2D> ruppert;
+  ofPoints2DReader<MyofDefault2D> reader;
+  ofVtkWriter<MyofDefault2D> writer;
+  Interactor->setDraw(RenderScene);
+	meshHandler.Set(new TMesh());
+      char *fileBrasil = "/home/helton/Downloads/ep_mvga/epMvga2017/Brasil.off";
+
+     
+    reader.readOffFile(fileBrasil);
+    
     ruppert.execute2D(reader.getLv(),reader.getLids(),true);
-    
-    meshHandler = ruppert.getMesh();
-    malha = ruppert.getMesh();
-    
-    Print = new TPrintOf(meshHandler);
-    allCommands = new TMyCommands(Print, Interactor);
+    //writer.write(ruppert.getMesh(),"out.vtk",reader.getNorma(),ruppert.getNumberOfInsertedVertices());
+  
+  meshHandler = ruppert.getMesh();
+  malha = ruppert.getMesh();
+  
+  
+  Print = new TPrintOf(meshHandler);
 
-	double a,x1,x2,y1,y2,z1,z2;
-	
+	allCommands = new TMyCommands(Print, Interactor);
+
+	double a,x1,x2,y1,y2,z1,z2; 
+
 	of::ofVerticesIterator<TTraits> iv(&meshHandler);
-	
+
 	iv.initialize();
 	x1 = x2 = iv->getCoord(0);
 	y1 = y2 = iv->getCoord(1);
 	z1 = z2 = iv->getCoord(2);
-	
-	
 
-	for (iv.initialize(); iv.notFinish(); ++iv)
-    {
+	for(iv.initialize(); iv.notFinish(); ++iv){
         //[EP] ----DESINVERTE O MAPA DO BRASIL
         iv->setCoord(1, -iv->getCoord(1));
         //[FIM]
@@ -339,7 +336,7 @@ int main(int argc, char *argv[])
 	maxdim = fabs(x2 - x1);
 	if(maxdim < fabs(y2 - y1)) maxdim = fabs(y2 - y1);
 	if(maxdim < fabs(z2 - z1)) maxdim = fabs(z2 - z1);
-	
+
 	//[EP] ----ZOOM E POSICAO INICIAL----
 	maxdim *= 0.4; 
 	Point center((x1+x2)/2.5, (y1+y2)/1.5, (y1+y2)/2.0 );
