@@ -65,6 +65,9 @@ int type = 3;
 
 //[EP] ----VARIAVEL QUE CONTROLA O ID DO TRIANGULO INICIAL DE BUSCA----/
 int id_atual = 255;
+void getInicio(bool clique_direito);
+void baricentrico(double& b1, double& b2, double& b3);
+void EP();
 
 //[EP] ----REALIZA BUSCA EXAUSTIVA PARA IDENTIFICAR DEFINIR O TRIANGULO DE INICIO----/
 //Obs.: Poderia ser feita mudan�a na estrutura de Cell para incluir um campo visitada
@@ -81,7 +84,7 @@ void getInicio(bool clique_direito)
             double yp = Interactor->getPYD(); //coordenada y
             double b1, b2, b3; //coordenadas baricentricas
             b1 = b2 = b3 = -1; //inicializar valores das coordenadas baricentricas arbitrariamente
-            baricentrico(b1, b2, b3);
+            baricentrico(b1, b2, b3, xp, yp);
             //ATUALIZA E ENCERRA SE ENCONTRAR TRIANGULO NO PONTO CLICADO
             if (b1 > 0 && b2 > 0 && b3 > 0)
             {
@@ -98,7 +101,7 @@ void getInicio(bool clique_direito)
      }
 }
 
-void baricentrico(double& b1, double& b2, double& b3){
+void baricentrico(double& b1, double& b2, double& b3, double& xp, double& yp){
 	double xa, ya, xb, yb, xc, yc; //coordenadas dos pontos do triangulo ABC
 	//OBTER AS COORDENADAS DOS PONTOS QUE FORMAM UM TRIANGULO----//
 	xa = malha->getVertex(malha->getCell(i)->getVertexId(0))->getCoord(0);
@@ -141,7 +144,7 @@ void EP(){
           //----Impress�o o caminho no terminal----/
           //cout<< id<<";";
           
-          baricentrico(b1, b2, b3);
+          baricentrico(b1, b2, b3, xp, yp);
 
 
           //[EP] ----VERIFICAR SE O PONTO PERTENCE AO TRIANGULO----//
