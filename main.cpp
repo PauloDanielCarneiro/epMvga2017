@@ -82,10 +82,8 @@ bool perteceAtual(int& menor, double b1, double b2, double b3);
 //Funções
 void getCoordenates(){
 	double px, py;
-	pontoX = Interactor->getPXD();
-	pontoY = Interactor->getPYD();
-	px = pontoX;
-	py = pontoY;
+	px = Interactor->getPXD();
+	py = Interactor->getPYD();
 	baricentrico(px, py);
 }
 
@@ -208,15 +206,15 @@ void RenderScene(void){
 	//Chama metodo para definir inicio
 	if(Interactor->getMouseRight()){
 		getCoordenates();
-		xp = Interactor->getPX();
-		yp = Interactor->getPY();
+		pontoX = Interactor->getPX();
+		pontoY = Interactor->getPY();
 		Print->FacesWireframe(malha, grey, 3);
 		glFinish();
 		glutSwapBuffers();
 	}
 
 	//Caminho por coordenadas baricentricas
-	if(xp != Interactor->getPX() || yp != Interactor->getPY()){
+	if(pontoX != Interactor->getPX() || pontoY != Interactor->getPY()){
 		resolucao(Interactor->getPX(), Interactor->getPY(), id_atual);
 		Print->FacesWireframe(malha, grey, 3);
 		glFinish();
