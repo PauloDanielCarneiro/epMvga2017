@@ -5,7 +5,6 @@
 #include <vector>
 #include <algorithm>
 #include <functional>
-#include <string.h>
 
 #include "of.h"
 #include "ColorRGBA.hpp"

@@ -1,6 +1,5 @@
 #include "scrInteractor.h"
 #include <stdio.h>
-#include <stdlib.h>
 #include <iostream>
 
 
@@ -10,36 +9,35 @@ using namespace std;
 bool scrInteractor::Normal_Change = 0;
 float* scrInteractor::Centroide = new float[3];;
 
-//[EP] ----VARI�VEIS QUE ARMAZENAM AS COORDENADAS DO PONTO CLICADO----//
-//Clique esquerdo
+//EP
 double PX = 0.0;
 double PY = 0.0;
-//Clique direito
 double PXD = 0.0;
 double PYD = 0.0;
 
-//[EP] ----RETORNA TRUE SE O BOTAO DO MOUSE FOI ACIONADO----
-bool scrInteractor::getMouseLeft()
-{
-     return this->mouse_left;
-}
-bool scrInteractor::getMouseRight()
-{
-     return this->mouse_right;
+bool scrInteractor::getMouseLeft(){
+	return this->mouse_left;
 }
 
-//[EP] ----M�TODOS RETORNAM OS PONTOS CLICADOS
-//Clique esquerdo
-double scrInteractor::getPX() {
-       return PX; }
-double scrInteractor::getPY() {
-       return PY; }
-//Clique direito
-double scrInteractor::getPXD() {
-       return PXD; }
-double scrInteractor::getPYD() {
-       return PYD; }
-//[FIM]
+bool scrInteractor::getMouseRight(){
+	return this->mouse_right;
+}
+
+double scrInteractor::getPX(){
+	return PX;
+}
+
+double scrInteractor::getPY(){
+	return PY;
+}
+
+double scrInteractor::getPXD(){
+	return PXD;
+}
+
+double scrInteractor::getPYD(){
+	return PYD;
+}
 
 
 /*====================== glButton ===================================*/
@@ -262,8 +260,11 @@ void scrInteractor::MouseMotion(int x, int y) /* é acessada com o movimento do 
 
 	if (this->mouse_left && this->mouse_right)
 		this->Calc_Translation();
-	//else if (this->mouse_left && !this->mouse_right)
-	//	this->Calc_Rotation();
+	//ep
+	/*
+		else if (this->mouse_left && !this->mouse_right)
+		this->Calc_Rotation();
+	*/
 	else if (!this->mouse_left && this->mouse_right)
 		this->Calc_Scale();
 
@@ -288,25 +289,24 @@ void scrInteractor::Mouse(int button, int state, int x, int y) /* coordena */
 		pt_mouse.setValues(x, y);
 
 		if (button == GLUT_RIGHT_BUTTON)
-        {
-           //[EP] ----CAPTURA O CLIQUE DO BOTAO DIREITO----/
-           double captura[3];
-           this->ScreenToPoint(this->pt_mouse, captura);
-           PXD = captura[0];
-           PYD = captura[1];
-           this->mouse_right = true;
-           //[FIM]
-        }
+			//EP
+			double captura[3];
+			this->ScreenToPoint(this->pt_mouse, captura);
+			PXD = captura[0];
+			PYD = captura[1];
+			//EP END
+			this->mouse_right = true;
+		
+		if (button == GLUT_LEFT_BUTTON)
+		{
+			//EP
+			double captura[3];
+			this->ScreenToPoint(this->pt_mouse, captura);
+			PX = captura[0];
+			PY = captura[1];
+			this->mouse_left = true;
+			//EP END
 
-        if (button == GLUT_LEFT_BUTTON) 
-        {
-           //[EP] ----CAPTURA O CLIQUE DO BOTAO ESQUERDO----/
-           double captura[3];
-           this->ScreenToPoint(this->pt_mouse, captura);
-           PX = captura[0];
-           PY = captura[1];
-           this->mouse_left = true;
-           //[FIM]
 			mod_keys = glutGetModifiers();
 			if (mod_keys == GLUT_ACTIVE_SHIFT)
 			{
@@ -1217,9 +1217,9 @@ void scrInteractor::subMouse(int button, int state, int x, int y) /* coordena as
 			}
 
 		}
-		//if (button == GLUT_RIGHT_BUTTON)
+		if (button == GLUT_RIGHT_BUTTON)
 			
-		//glutPostRedisplay();
+		glutPostRedisplay();
       glFlush();
 	}
 
@@ -1229,87 +1229,78 @@ void scrInteractor::subMouse(int button, int state, int x, int y) /* coordena as
 	
 /*===================================================================*/
 
-void scrInteractor::subDisplay() {
-    char label[50];
+void scrInteractor::subDisplay()
+{
+	char label[50];
+	
+	glutSetWindow(this->sub_winid);
 
-    glutSetWindow(this->sub_winid);
+	glMatrixMode (GL_MODELVIEW);
+	glLoadIdentity();
 
-    glMatrixMode(GL_MODELVIEW);
-    glLoadIdentity();
+	glClearColor(0.65, 0.65, 0.65, 0.0);
 
-    glClearColor(0.65, 0.65, 0.65, 0.0);
+	// Clear the window with current clearing color
+	glClear(GL_COLOR_BUFFER_BIT);
 
-    // Clear the window with current clearing color
-    glClear(GL_COLOR_BUFFER_BIT);
+	glColor3f(0.0f, 0.2f, 0.2f);
+	glInitNames();
+	glPushName(0);
+	glLoadName(BTN_RENDER);
+		this->buttons[0].Draw();
+	glEnd();			
 
-    glColor3f(0.0f, 0.2f, 0.2f);
-    glInitNames();
-    glPushName(0);
-    glLoadName(BTN_RENDER);
-    this->buttons[0].Draw();
-    glEnd();
+	glLoadName(BTN_RESET);
+		this->buttons[1].Draw();
+	glEnd();			
 
-    glLoadName(BTN_RESET);
-    this->buttons[1].Draw();
-    glEnd();
+	glLoadName(BTN_X_AXIS);
+		this->buttons[2].Draw();
+	glEnd();			
 
-    glLoadName(BTN_X_AXIS);
-    this->buttons[2].Draw();
-    glEnd();
+	glLoadName(BTN_Y_AXIS);
+		this->buttons[3].Draw();
+	glEnd();			
 
-    glLoadName(BTN_Y_AXIS);
-    this->buttons[3].Draw();
-    glEnd();
-
-    glLoadName(BTN_Z_AXIS);
-    this->buttons[4].Draw();
-    glEnd();
-
-    glLoadName(BTN_COLOR);
-    this->buttons[5].Draw();
-    glEnd();
-
-    glLoadName(BTN_CHANGE_NORMAL);
-    this->buttons[6].Draw();
-    glEnd();
-
-    glLoadName(BTN_CENTROIDE);
-    this->buttons[7].Draw();
-    glEnd();
-
-    sprintf(label, "Rotation Point:");
-
-    glColor3f(1.0f, 1.0f, 1.0f);
-    glRasterPos2f(0.62, 0.73);
-    this->Draw_String(label);
-
-    sprintf(label, "X(%4.3f) Y(%4.3f) Z(%4.3f)", this->vec_translation[0], this->vec_translation[1], this->vec_translation[2]);
-    glRasterPos2f(0.77, 0.73);
-    this->Draw_String(label);
+	glLoadName(BTN_Z_AXIS);
+		this->buttons[4].Draw();
+	glEnd();			
     
-    //[EP] ----INSERIDOS PARA EXIBIR AS COORDENADAS CLICADAS----
-    sprintf(label, "Clique Esquerdo:");
-    glColor3f(1.0f, 1.0f, 1.0f);
-    glRasterPos2f(0.62, 0.40);
-    this->Draw_String(label);
-    
-    sprintf(label, "X(%4.3f) Y(%4.3f)", PX, PY);
-    glRasterPos2f(0.77, 0.40);
-    this->Draw_String(label);
-    
-    sprintf(label, "Clique Direito:");
-    glColor3f(1.0f, 1.0f, 1.0f);
-    glRasterPos2f(0.62, 0.07);
-    this->Draw_String(label);
-    
-    sprintf(label, "X(%4.3f) Y(%4.3f)", PXD, PYD);
-    glRasterPos2f(0.77, 0.07);
-    this->Draw_String(label);
-    //[FIM]
-    
-    glFlush();
-    glutSwapBuffers();
-    glutPostRedisplay();
+   glLoadName(BTN_COLOR);
+		this->buttons[5].Draw();
+	glEnd();	
+   
+   glLoadName(BTN_CHANGE_NORMAL);
+      this->buttons[6].Draw();
+	glEnd();
+   
+   glLoadName(BTN_CENTROIDE);
+      this->buttons[7].Draw();
+	glEnd();
+   
+
+
+
+
+
+   /*****************************************************************************************/
+   // arrumar a localização destes caracteres.  
+   /*****************************************************************************************/   
+
+	sprintf(label, "Rotation Point");
+
+	glColor3f(1.0f, 1.0f, 1.0f);
+	glRasterPos2f(0.68, 0.33);
+	this->Draw_String(label);
+   
+   sprintf(label, "X(%4.3f) Y(%4.3f) Z(%4.3f)",	this->vec_translation[0], this->vec_translation[1], this->vec_translation[2]); 
+	
+   glRasterPos2f(0.77, 0.33);
+	this->Draw_String(label);
+   
+	glFlush();			
+	glutSwapBuffers();
+   glutPostRedisplay();
 }
 /*===================================================================*/
 float * scrInteractor::getTranslation()

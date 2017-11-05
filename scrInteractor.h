@@ -140,14 +140,13 @@ class scrInteractor
         std::string& GetScreenImageFilename();
 		bool WriteScreenImage();
 		
-		//[EP] ----VARIAVEIS QUE RETORNAM COORDENADAS DO CLIQUE DO MOUSE----
-		double getPX(); //captura x esquerdo
-		double getPY(); //captura y esquerdo
-		double getPXD(); //captura x direito
-		double getPYD(); //captura y direito
-		bool getMouseLeft();  //captura se clique esquerdo
-		bool getMouseRight(); //captura se clique direito
-		//[FIM]
+		//EP
+		double getPX();
+		double getPY();
+		double getPXD();
+		double getPYD();
+		bool getMouseLeft();
+		bool getMouseRight();
 
 		int view_list;
 		void Init_List();
@@ -174,6 +173,8 @@ class scrInteractor
 		void Draw_String(char * text);
 
 		void Draw_Axis();
+
+		
 	
 		void Calc_Scale();
 
@@ -231,6 +232,8 @@ class scrInteractor
 		float * matrix;
 
 		float * axis_matrix;
+		
+		
 
 		int main_winid;
 		int sub_winid;
