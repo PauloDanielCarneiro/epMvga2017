@@ -99,7 +99,7 @@ void baricentrico(double px, double py){
 		//procura triangulo clicado
 		if(b1 > 0 && b2 > 0 && b3 > 0){
 			id_atual = i;
-			break
+			break;
 		}else{//clique fora do mapa reseta a função
 			id_atual = 300;
 		}
@@ -117,12 +117,12 @@ void CalculateBari(double px, double py, int id, double& b1, double& b2, double&
 	double xa, ya, xb, yb, xc, yc;
 
 	//1- Obter so vértices do triangulo
-	xa = malha->getVertex(malha->getCell(id)getVertexId(0))->getCoord(0);
-	ya = malha->getVertex(malha->getCell(id)getVertexId(0))->getCoord(1);
-	xb = malha->getVertex(malha->getCell(id)getVertexId(1))->getCoord(0);
-	yb = malha->getVertex(malha->getCell(id)getVertexId(1))->getCoord(1);
-	xc = malha->getVertex(malha->getCell(id)getVertexId(2))->getCoord(0);
-	yc = malha->getVertex(malha->getCell(id)getVertexId(2))->getCoord(1);
+	xa = malha->getVertex(malha->getCell(id)->getVertexId(0))->getCoord(0);
+	ya = malha->getVertex(malha->getCell(id)->getVertexId(0))->getCoord(1);
+	xb = malha->getVertex(malha->getCell(id)->getVertexId(1))->getCoord(0);
+	yb = malha->getVertex(malha->getCell(id)->getVertexId(1))->getCoord(1);
+	xc = malha->getVertex(malha->getCell(id)->getVertexId(2))->getCoord(0);
+	yc = malha->getVertex(malha->getCell(id)->getVertexId(2))->getCoord(1);
 
 	//2- calcular a area dos triangulos internos com base nas coordenadas dadas 
 	double ABC = 0.5*((xa*yb)-(ya*xb)+(ya*xc)-(xa*yc)+(xb*yc)-(yb*xc));
