@@ -137,7 +137,7 @@ void EP(){
        double b1, b2, b3; //coordenadas baricentricas
        b1 = b2 = b3 = -1; //inicializar valores das coordenadas baricentricas arbitrariamente
 
-       while (b1 <= 0 || b2 <= 0 || bar3 <= 0)
+       while (b1 <= 0 || b2 <= 0 || b3 <= 0)
        {
           //IMPRIMIR O TRIANGULO VISITADO
           Print->Face(malha->getCell(id), dgreen);
@@ -176,7 +176,7 @@ void EP(){
                  menor = 0; //p encontra-se ao lado da aresta BC
                  prox = malha->getCell(id)->getMateId(0);
               }
-              if (bar2 < b1 && b2 < b3)
+              if (b2 < b1 && b2 < b3)
               {
                  menor = 1; //p encontra-se ao lado da aresta AC
                  prox = malha->getCell(id)->getMateId(1);
