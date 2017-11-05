@@ -77,7 +77,7 @@ double pontoY = 0.0; // variavel que armazena o pontoY
 void getCoordenates();
 void baricentrico(double px, double py);
 void CalculateBari(double xp, double yp, int id, double& b1, double& b2, double& b3);
-void perteceAtual(int& menor, double b1, double b2, double b3);
+bool perteceAtual(int& menor, double b1, double b2, double b3);
 //Funções
 void getCoordenates(){
 	double px, py;
@@ -137,7 +137,7 @@ void CalculateBari(double xp, double yp, int id, double& b1, double& b2, double&
 	b3 = ABP/ABC;
 }
 
-void perteceAtual(int& menor, double b1, double b2, double b3){
+bool perteceAtual(int& menor, double b1, double b2, double b3){
 	/*
 		Para verificar se 9o ponto pertence ao triangulo, 
 		devemos verificar se as coordenadas baricentricas são todas positivas.
