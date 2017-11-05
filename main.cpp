@@ -154,57 +154,53 @@ void EP(){
                if (bar1 > 0 && bar2 > 0 && bar3 > 0) { return true; }
             Sen�o, o ponto est� na dire��o oposta � coordenada mais negativa.
             Ou seja, primeiramente devemos verificar qual das coordenadas � a mais negativa:
-               if (bar1 < bar2 && bar1 < bar3) { menor = bar1; }
-               if (bar2 < bar1 && bar2 < bar3) { menor = bar2; }
-               if (bar3 < bar1 && bar3 < bar2) { menor = bar3; }
+               if (bar1 < bar2 && bar1 < bar3) { CoordMenor = bar1; }
+               if (bar2 < bar1 && bar2 < bar3) { CoordMenor = bar2; }
+               if (bar3 < bar1 && bar3 < bar2) { CoordMenor = bar3; }
           */
     
           //ENCERRAR SE CHEGOU AO TRIANGULO DESEJADO
-          int prox, menor;          
-          //Conforme a defini��o, se as 3 coordenadas s�o positivas ponto esta no triangulo
+          int prox, CoordMenor;          
+          //Verifica se coordenadas são positivas
           if (b1 > 0 && b2 > 0 && b3 > 0)
           {
-             //cout<<endl;
              break;
           }
-          //NAO CHEGOU AO TRIANGULO, DETERMINAR A MENOR COORDENADA
+          //Não é o triangulo procurado, determinar vertice de menor valor
           else
           {
-              //menor: BC = 0, AC = 1, AB =2
+              //CoordMenor: BC = 0, AC = 1, AB =2
               if (b1 < b2 && b1 < b3)
               {
-                 menor = 0; //p encontra-se ao lado da aresta BC
                  prox = malha->getCell(id)->getMateId(0);
+                 CoordMenor = 0; //p está saindo de BC
               }
               if (b2 < b1 && b2 < b3)
               {
-                 menor = 1; //p encontra-se ao lado da aresta AC
                  prox = malha->getCell(id)->getMateId(1);
+                 CoordMenor = 1; //p está saindo de AC
               }
               if (b3 < b1 && b3 < b2)
               {
-                 menor = 2; //p encontra-se ao lado da aresta AB
-                 prox = malha->getCell(id)->getMateId(2);
+				 prox = malha->getCell(id)->getMateId(2);
+                 CoordMenor = 2; //p está saindo de AB
               }
-              
-              //TODO: PERGUNTAR AO PROFESSOR SE PRECISA PERCORRER UM CAMINHO NO MAPA OU SOMENTE O MAIS CURTO COMO NESSE CASO
-              
-              //VERIFICAR SE CHEGOU NA FRONTEIRA
+
+              //Verifica se chegou na borda
               if (prox == -1)
               {
-                 //IMPRIME A ARESTA POR ONDE SAIU - 3 CASOS
-                 if (menor == 0) //BC
-                    //IMPRIMIR A ARESTA DE SAIDA
-                    Print->Edge(malha->getVertex(malha->getCell(id)->getVertexId(1)), malha->getVertex(malha->getCell(id)->getVertexId(2)), black, 3.0);
-                 if (menor == 1) //AC
-                    //IMPRIMIR A ARESTA DE SAIDA
-                    Print->Edge(malha->getVertex(malha->getCell(id)->getVertexId(0)), malha->getVertex(malha->getCell(id)->getVertexId(2)), black, 3.0);
-                 if (menor == 2) //AB
-                    //IMPRIMIR A ARESTA DE DAIDA
-                    Print->Edge(malha->getVertex(malha->getCell(id)->getVertexId(0)), malha->getVertex(malha->getCell(id)->getVertexId(1)), black, 3.0);
-                 //[EP] ----IMPRESSAO DE TESTE----/
-                 //cout<< "Clicou fora do mapa" <<endl;
-                 break;
+				  //IMPRIME A ARESTA POR ONDE SAIU - 3 CASOS
+				switch(CoordMenor){
+					case 0:
+						Print->Edge(malha->getVertex(malha->getCell(id)->getVertexId(1)), malha->getVertex(malha->getCell(id)->getVertexId(2)), black, 3.0);
+						break;
+					case 1:
+						Print->Edge(malha->getVertex(malha->getCell(id)->getVertexId(0)), malha->getVertex(malha->getCell(id)->getVertexId(2)), black, 3.0);
+						break;
+					case 2:
+						Print->Edge(malha->getVertex(malha->getCell(id)->getVertexId(0)), malha->getVertex(malha->getCell(id)->getVertexId(1)), black, 3.0);
+						break
+				}
               }
           }
           id = prox;
@@ -325,7 +321,7 @@ double pontoY = 0.0; // variavel que armazena o pontoY
 void getCoordenates();
 void baricentrico(double px, double py);
 void CalculateBari(double xp, double yp, int id, double& b1, double& b2, double& b3);
-bool perteceAtual(int& menor, double b1, double b2, double b3);
+bool perteceAtual(int& CoordMenor, double b1, double b2, double b3);
 //Funções
 void getCoordenates(){
 	double px, py;
@@ -383,16 +379,16 @@ void CalculateBari(double xp, double yp, int id, double& b1, double& b2, double&
 	b3 = ABP/ABC;
 }
 
-bool perteceAtual(int& menor, double b1, double b2, double b3){
+bool perteceAtual(int& CoordMenor, double b1, double b2, double b3){
 	/*
 		Para verificar se 9o ponto pertence ao triangulo, 
 		devemos verificar se as coordenadas baricentricas são todas positivas.
-		Caso contrario, deverá sair pelo lado oposto ao vertice de menor valor.
+		Caso contrario, deverá sair pelo lado oposto ao vertice de CoordMenor valor.
 	
 	if (b1 > 0 && b2 > 0 && b3 > 0) return true;
-	else if (b1 < b2 && b1 < b3) menor = 0;
-	else if (b2 < b1 && b2 < b3) menor = 1;
-	else menor = 2;
+	else if (b1 < b2 && b1 < b3) CoordMenor = 0;
+	else if (b2 < b1 && b2 < b3) CoordMenor = 1;
+	else CoordMenor = 2;
 	return false; 
 }
 
@@ -400,7 +396,7 @@ bool perteceAtual(int& menor, double b1, double b2, double b3){
 void resolucao(double xp, double yp, int id){
 	double b1, b2, b3;//coordenadas baricentricas
 	double xa, ya, xb, yb, xc, yc;//triangulo ABC
-	int prox, menor;
+	int prox, CoordMenor;
 	int vertice[2];
 	bool res;
 
@@ -412,15 +408,15 @@ void resolucao(double xp, double yp, int id){
 		//Calcula as coordenadas
 		CalculateBari(xp, yp, id, b1, b2, b3);
 		//verifica qual o triangulo desejado
-		res = perteceAtual(menor, b1, b2, b3);
+		res = perteceAtual(CoordMenor, b1, b2, b3);
 		if (res) break;
 		else{
 			//pega o valor do proximo triangulo
-			prox = malha->getCell(id)->getMateId(menor);
+			prox = malha->getCell(id)->getMateId(CoordMenor);
 			//verifica se chegou a fronteira
 			if (prox == -1){
 				//Mostra por qual vertice ele saiu
-				switch(menor){
+				switch(CoordMenor){
 					case 0:
 						vertice[0] = 1;
 						vertice[1] = 2;
