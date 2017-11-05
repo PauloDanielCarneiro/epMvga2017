@@ -72,11 +72,12 @@ double pontoY = 0.0; // variavel que armazena o pontoY
 1- captura coordenada
 2- realiza calculos baricentricos
 3- Procura qual o triangulo que foi clicado
+4- verifica se o ponto clicado pertence ao triangulo atual
 */
 void getCoordenates();
 void baricentrico(double px, double py);
 void CalculateBari(double xp, double yp, int id, double& b1, double& b2, double& b3);
-
+void perteceAtual(int& menor, double b1, double b2, double b3);
 //Funções
 void getCoordenates(){
 	double px, py;
@@ -134,6 +135,19 @@ void CalculateBari(double xp, double yp, int id, double& b1, double& b2, double&
 	b1 = PBC/ABC;
 	b2 = APC/ABC;
 	b3 = ABP/ABC;
+}
+
+void perteceAtual(int& menor, double b1, double b2, double b3){
+	/*
+		Para verificar se 9o ponto pertence ao triangulo, 
+		devemos verificar se as coordenadas baricentricas são todas positivas.
+		Caso contrario, deverá sair pelo lado oposto ao vertice de menor valor.
+	*/
+	if (b1 > 0 && b2 > 0 && b3 > 0) return true;
+	else if (b1 < b2 && b1 < b3) menor = 0;
+	else if (b2 < b1 && b2 < b3) menor = 1;
+	else menor = 2;
+	return false; 
 }
 
 void RenderScene(void){ 
