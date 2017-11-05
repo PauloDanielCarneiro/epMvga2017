@@ -149,6 +149,9 @@ class scrInteractor
 		bool getMouseRight(); //captura se clique direito
 		//[FIM]
 
+		int view_list;
+		void Init_List();
+
 	protected :
 	
 		/*Criar uma variavel centroide para armazenar o centroide =)*/
@@ -171,8 +174,6 @@ class scrInteractor
 		void Draw_String(char * text);
 
 		void Draw_Axis();
-		
-		void Init_List();
 	
 		void Calc_Scale();
 
@@ -230,8 +231,6 @@ class scrInteractor
 		float * matrix;
 
 		float * axis_matrix;
-		
-		int view_list;
 
 		int main_winid;
 		int sub_winid;
