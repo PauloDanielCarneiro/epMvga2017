@@ -64,7 +64,7 @@ int type = 3;
 ////////////////////////////////////////////////////////////////////////
 
 //[EP] ----VARIAVEL QUE CONTROLA O ID DO TRIANGULO INICIAL DE BUSCA----/
-int id_init = 0;
+int id_atual = 255;
 
 //[EP] ----REALIZA BUSCA EXAUSTIVA PARA IDENTIFICAR DEFINIR O TRIANGULO DE INICIO----/
 //Obs.: Poderia ser feita mudan�a na estrutura de Cell para incluir um campo visitada
@@ -73,44 +73,49 @@ void getInicio(bool clique_direito)
 {
      if (clique_direito)
      {
-        int i;
-	    for (i = 0; i < malha->getNumberOfCells(); i++)
+		int i = 0;
+		int celulas = malha->getNumberOfCells()
+	    while (i < celulas)
 	    {
             double xp = Interactor->getPXD(); //coordenada x
             double yp = Interactor->getPYD(); //coordenada y
-            double bar1, bar2, bar3; //coordenadas baricentricas
-            bar1 = bar2 = bar3 = -1; //inicializar valores das coordenadas baricentricas arbitrariamente
-            double xa, ya, xb, yb, xc, yc; //coordenadas dos pontos do triangulo ABC
-            //OBTER AS COORDENADAS DOS PONTOS QUE FORMAM UM TRIANGULO----//
-            xa = malha->getVertex(malha->getCell(i)->getVertexId(0))->getCoord(0);
-            ya = malha->getVertex(malha->getCell(i)->getVertexId(0))->getCoord(1);
-            xb = malha->getVertex(malha->getCell(i)->getVertexId(1))->getCoord(0);
-            yb = malha->getVertex(malha->getCell(i)->getVertexId(1))->getCoord(1);
-            xc = malha->getVertex(malha->getCell(i)->getVertexId(2))->getCoord(0);
-            yc = malha->getVertex(malha->getCell(i)->getVertexId(2))->getCoord(1);
-            //CALCULAR AS AREAS DOS TRIANGULOS
-            double areaABC = 0.5*((xa*yb)-(ya*xb)+(ya*xc)-(xa*yc)+(xb*yc)-(yb*xc));
-            double areaPBC = 0.5*((xp*yb)-(yp*xb)+(yp*xc)-(xp*yc)+(xb*yc)-(yb*xc));
-            double areaAPC = 0.5*((xa*yp)-(ya*xp)+(ya*xc)-(xa*yc)+(xp*yc)-(yp*xc));
-            double areaABP = 0.5*((xa*yb)-(ya*xb)+(ya*xp)-(xa*yp)+(xb*yp)-(yb*xp));
-            //DETERMINAR AS COORDENDAS BARICENTRICAS
-            bar1 = areaPBC/areaABC;
-            bar2 = areaAPC/areaABC;
-            bar3 = areaABP/areaABC;
-            
+            double b1, b2, b3; //coordenadas baricentricas
+            b1 = b2 = b3 = -1; //inicializar valores das coordenadas baricentricas arbitrariamente
+            baricentrico(b1, b2, b3);
             //ATUALIZA E ENCERRA SE ENCONTRAR TRIANGULO NO PONTO CLICADO
-            if (bar1 > 0 && bar2 > 0 && bar3 > 0)
+            if (b1 > 0 && b2 > 0 && b3 > 0)
             {
-               id_init = i;
-               return;
+				id_atual = i;
+               	return;
             }
             //CLIQUE FORA DO MAPA
             else 
             {
-                 id_init = 0;
-            }
+				id_atual = 255;
+			}
+		i++;
         }
      }
+}
+
+void baricentrico(double& b1, double& b2, double& b3){
+	double xa, ya, xb, yb, xc, yc; //coordenadas dos pontos do triangulo ABC
+	//OBTER AS COORDENADAS DOS PONTOS QUE FORMAM UM TRIANGULO----//
+	xa = malha->getVertex(malha->getCell(i)->getVertexId(0))->getCoord(0);
+	ya = malha->getVertex(malha->getCell(i)->getVertexId(0))->getCoord(1);
+	xb = malha->getVertex(malha->getCell(i)->getVertexId(1))->getCoord(0);
+	yb = malha->getVertex(malha->getCell(i)->getVertexId(1))->getCoord(1);
+	xc = malha->getVertex(malha->getCell(i)->getVertexId(2))->getCoord(0);
+	yc = malha->getVertex(malha->getCell(i)->getVertexId(2))->getCoord(1);
+	//CALCULAR AS AREAS DOS TRIANGULOS
+	double ABC = 0.5*((xa*yb)-(ya*xb)+(ya*xc)-(xa*yc)+(xb*yc)-(yb*xc));
+	double PBC = 0.5*((xp*yb)-(yp*xb)+(yp*xc)-(xp*yc)+(xb*yc)-(yb*xc));
+	double APC = 0.5*((xa*yp)-(ya*xp)+(ya*xc)-(xa*yc)+(xp*yc)-(yp*xc));
+	double ABP = 0.5*((xa*yb)-(ya*xb)+(ya*xp)-(xa*yp)+(xb*yp)-(yb*xp));
+	//DETERMINAR AS COORDENDAS BARICENTRICAS
+	b1 = PBC/ABC;
+	b2 = APC/ABC;
+	b3 = ABP/ABC;
 }
 
 //[EP] ----METODO QUE RESOLVE O PROBLEMA PROPOSTO-----------------------------//
@@ -121,66 +126,22 @@ void EP(){
     yp = Interactor->getPY();
     
     //----DEFINE O TRIANGULO INICIAL----//
-    int id = id_init;
+    int id = id_atual;
     
     //NAO IMPRIMIR SE ESTIVER NO ESTADO INICIAL
     if (xp != 0.0 && yp != 0.0)
-    {
-           
-       //[EP] ----COORDENADAS BARICENTRICAS-----------------------------------//
-       /*
-       Fatos:
-            p = bar1*a + bar2*b + bar3*c
-            bar1 + bar2 + bar3 = 1
-       Contruir um sistema de 3 equa��es e 3 inc�gnitas:
-               bar1*xa + bar2*xb + bar3*xc = xp
-               bar1*ya + bar2*yb + bar3*yc = yp
-               bar1    + bar2    + bar3    = 1
-       Os valores dos determinantes podem ser obtidos pela regra de Cramer, e sao 
-       equivalentes as seguintes areas dos triangulos:
-         Det = areaABC <-> D
-         bar1 = areaPBC/areaABC <-> D1/D
-         bar2 = areaAPC/areaABC <-> D2/D
-         bar3 = areaABP/areaABC <-> D3/D
-       Evidentemente a soma D1+D2+D3 = D.
+    {    
+       double b1, b2, b3; //coordenadas baricentricas
+       b1 = b2 = b3 = -1; //inicializar valores das coordenadas baricentricas arbitrariamente
 
-       C�lculos das �reas dos triangulos
-                areaABC = 0.5*((xa*yb)-(ya*xb)+(ya*xc)-(xa*yc)+(xb*yc)-(yb*xc))
-                areaPBC = 0.5*((xp*yb)-(yp*xb)+(yp*xc)-(xp*yc)+(xb*yc)-(yb*xc))
-                areaAPC = 0.5*((xa*yp)-(ya*xp)+(ya*xc)-(xa*yc)+(xp*yc)-(yp*xc))
-                areaABP = 0.5*((xa*yb)-(ya*xb)+(ya*xp)-(xa*yp)+(xb*yp)-(yb*xp))
-       */
-       //---------------------------------------------------------------------//
-    
-       double bar1, bar2, bar3; //coordenadas baricentricas
-       bar1 = bar2 = bar3 = -1; //inicializar valores das coordenadas baricentricas arbitrariamente
-       double xa, ya, xb, yb, xc, yc; //coordenadas dos pontos do triangulo ABC
-
-       while (bar1 <= 0 || bar2 <= 0 || bar3 <= 0)
+       while (b1 <= 0 || b2 <= 0 || bar3 <= 0)
        {
           //IMPRIMIR O TRIANGULO VISITADO
           Print->Face(malha->getCell(id), dgreen);
           //----Impress�o o caminho no terminal----/
           //cout<< id<<";";
           
-          //OBTER AS COORDENADAS DOS PONTOS QUE FORMAM UM TRIANGULO----//
-          xa = malha->getVertex(malha->getCell(id)->getVertexId(0))->getCoord(0);
-          ya = malha->getVertex(malha->getCell(id)->getVertexId(0))->getCoord(1);
-          xb = malha->getVertex(malha->getCell(id)->getVertexId(1))->getCoord(0);
-          yb = malha->getVertex(malha->getCell(id)->getVertexId(1))->getCoord(1);
-          xc = malha->getVertex(malha->getCell(id)->getVertexId(2))->getCoord(0);
-          yc = malha->getVertex(malha->getCell(id)->getVertexId(2))->getCoord(1);
-
-          //CALCULAR AS AREAS DOS TRIANGULOS
-          double areaABC = 0.5*((xa*yb)-(ya*xb)+(ya*xc)-(xa*yc)+(xb*yc)-(yb*xc));
-          double areaPBC = 0.5*((xp*yb)-(yp*xb)+(yp*xc)-(xp*yc)+(xb*yc)-(yb*xc));
-          double areaAPC = 0.5*((xa*yp)-(ya*xp)+(ya*xc)-(xa*yc)+(xp*yc)-(yp*xc));
-          double areaABP = 0.5*((xa*yb)-(ya*xb)+(ya*xp)-(xa*yp)+(xb*yp)-(yb*xp));
-
-          //DETERMINAR AS COORDENDAS BARICENTRICAS
-          bar1 = areaPBC/areaABC;
-          bar2 = areaAPC/areaABC;
-          bar3 = areaABP/areaABC;
+          baricentrico(b1, b2, b3);
 
 
           //[EP] ----VERIFICAR SE O PONTO PERTENCE AO TRIANGULO----//
@@ -198,7 +159,7 @@ void EP(){
           //ENCERRAR SE CHEGOU AO TRIANGULO DESEJADO
           int prox, menor;          
           //Conforme a defini��o, se as 3 coordenadas s�o positivas ponto esta no triangulo
-          if (bar1 > 0 && bar2 > 0 && bar3 > 0)
+          if (b1 > 0 && b2 > 0 && b3 > 0)
           {
              //cout<<endl;
              break;
@@ -207,17 +168,17 @@ void EP(){
           else
           {
               //menor: BC = 0, AC = 1, AB =2
-              if (bar1 < bar2 && bar1 < bar3)
+              if (b1 < b2 && b1 < b3)
               {
                  menor = 0; //p encontra-se ao lado da aresta BC
                  prox = malha->getCell(id)->getMateId(0);
               }
-              if (bar2 < bar1 && bar2 < bar3)
+              if (bar2 < b1 && b2 < b3)
               {
                  menor = 1; //p encontra-se ao lado da aresta AC
                  prox = malha->getCell(id)->getMateId(1);
               }
-              if (bar3 < bar1 && bar3 < bar2)
+              if (b3 < b1 && b3 < b2)
               {
                  menor = 2; //p encontra-se ao lado da aresta AB
                  prox = malha->getCell(id)->getMateId(2);
@@ -258,7 +219,7 @@ void RenderScene(void){
 	//[EP] OBS: o que aparece primeiro � pintado por cima
 	Print->Vertices(malha,blue,3);
 	//[EP] IMPRIME A FACE ON VAI INICIAR O PERCURSO
-    Print->Face(malha->getCell(id_init), yellow);
+    Print->Face(malha->getCell(id_atual), yellow);
 
 
     //[EP] ----METODOS DE IMPRESSAO QUE FORAM UTILIZADOS NO DESENVOLVIMENTO----/
@@ -336,17 +297,6 @@ void HandleKeyboard(unsigned char key, int x, int y){
 			coords[2]=0.0;
 			malha->addVertex(coords);
 		break;
-		case 's':
-			
-			
-		break;
-
-		case 'd':
-			//RESERVADO PARA O M�TODO QUE VAI ALTERAR O ID DO TRIANGULO INICIAL
-			
-		break;
-	
-
 	}
     
 	Interactor->Refresh_List();
