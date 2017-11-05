@@ -74,7 +74,7 @@ void getInicio(bool clique_direito)
      if (clique_direito)
      {
 		int i = 0;
-		int celulas = malha->getNumberOfCells()
+		int celulas = malha->getNumberOfCells();
 	    while (i < celulas)
 	    {
             double xp = Interactor->getPXD(); //coordenada x
