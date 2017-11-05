@@ -1,4 +1,4 @@
-#include "of.h"
+/*#include "of.h"
 #include "ofOffPointsReader.h"
 #include "Handler.hpp" 
 #include "ColorRGBA.hpp"
@@ -23,7 +23,7 @@ typedef CommandComponent TAllCommands;
 
 of::ofVtkWriter<TTraits> writer;
 TAllCommands *allCommands;
-
+*/
 #include "scrInteractor.h"
 
 struct Coord
