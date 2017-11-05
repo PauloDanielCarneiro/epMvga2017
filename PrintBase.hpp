@@ -1,7 +1,7 @@
 #ifndef PRINT_BASE_HPP_
 #define PRINT_BASE_HPP_
 
-#include <GL/freeglut.h>
+#include <glut.h>
 #include <vector>
 #include <algorithm>
 #include <functional>

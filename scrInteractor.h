@@ -4,15 +4,10 @@
 
 //************** Includes ***************************
 #include "TrackBall.h"
-#include <GL/glew.h>
-#include <GL/freeglut.h>
+#include <glut.h>
+#include <gl\gl.h>
 #include <string>
-#include <cstring>
-using namespace std;
 //************** Defines de valores e funcoes ***************************
-
-
-
 
 enum render_mode{RUSER , RWIRE, RPOINT, RSHADING, RSHADING_WIRE};
 
@@ -69,9 +64,8 @@ class glButton
 		bool	state;
 		bool    visible;
 		float * text_color;
-      float * btn_color;
+        float * btn_color;
 		char  *	label;
-
 };
 
 
@@ -89,9 +83,9 @@ class scrInteractor
 
 			
 			
-        bool Init(float xmin, float xmax, float ymin, float ymax, float near_z, float far_z, int *argc, char **argv);
+        bool Init(float xmin, float xmax, float ymin, float ymax, float near_z, float far_z);
 		
-        bool Init (auxRect<float> rec_extents, float near_z, float far_z,int *argc, char **argv);
+        bool Init (auxRect<float> rec_extents, float near_z, float far_z);
 
 		void Display();
 
@@ -138,7 +132,8 @@ class scrInteractor
 		
         void SetScreenImageFilename(std::string filename);
         std::string& GetScreenImageFilename();
-		bool WriteScreenImage();
+        bool WriteScreenImage();
+		
 		
 		//[EP] ----VARIAVEIS QUE RETORNAM COORDENADAS DO CLIQUE DO MOUSE----
 		double getPX(); //captura x esquerdo
@@ -149,8 +144,7 @@ class scrInteractor
 		bool getMouseRight(); //captura se clique direito
 		//[FIM]
 		
-	int view_list;
-	void Init_List();
+		
 	protected :
 	
 		/*Criar uma variavel centroide para armazenar o centroide =)*/
@@ -174,15 +168,13 @@ class scrInteractor
 
 		void Draw_Axis();
 
-		
+		void Init_List();
 	
 		void Calc_Scale();
 
 		void Calc_Translation();
 
 		void Initial_Translation ();
-        
-        void Initial_Rotation();
 
 		void Init_Lights();
 
@@ -233,7 +225,7 @@ class scrInteractor
 
 		float * axis_matrix;
 		
-		
+		int view_list;
 
 		int main_winid;
 		int sub_winid;
@@ -246,7 +238,7 @@ class scrInteractor
 		render_mode render;
 
 		TrackBall trackball;
-
+		
 };
 
 

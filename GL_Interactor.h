@@ -36,7 +36,6 @@ struct Coord
 };
 
 extern scrInteractor * Interactor;
-//extern sheInteractor * Interactor;
 void(*functionKey) (unsigned char key, int x, int y) = NULL;
 
 /*======== Main Window Functions ============================================*/
@@ -55,12 +54,12 @@ void MouseMotion(int x, int y)
 {
 	Interactor->MouseMotion(x, y);
 }
-	
+
 void Mouse(int button, int state, int x, int y)
 {
 	Interactor->Mouse(button, state, x, y);
-
-	//[EP] ----ATUALIZA A TELA TODA A VEZ QUE CLICA----/
+ 
+    //[EP] ----ATUALIZA A TELA TODA A VEZ QUE CLICA----/
     Interactor->Refresh_List();
 	glutPostRedisplay();
 	//[FIM]
@@ -87,6 +86,7 @@ void subReshape(int width, int height)
 void subMouse(int button, int state, int x, int y)
 {
 	Interactor->subMouse(button, state, x, y);
+	
 }
 
 void subDisplay ()
@@ -121,10 +121,8 @@ void Init_Interactor()//TPrint * myTPrint)
 	glutReshapeFunc(subReshape);
 
 	glutMouseFunc(subMouse);
-
- glutPostRedisplay();
-  
-// Interactor->AddTPrint(myTPrint);
+    
+    glutPostRedisplay();
  
 	glutMainLoop();
 }
