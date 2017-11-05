@@ -21,7 +21,7 @@ TPrintOf *Print;
 typedef MyCommands<TPrintOf> TMyCommands;
 typedef CommandComponent TAllCommands;
 
-ofVtkWriter<TTraits> writer;
+of::ofVtkWriter<TTraits> writer;
 TAllCommands *allCommands;
 
 #include "scrInteractor.h"
