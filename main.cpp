@@ -200,17 +200,35 @@ void resolucao(double xp, double yp, int id){
 void RenderScene(void){ 
 	allCommands->Execute();
 	Print->Vertices(malha,blue,3);
+
+	//EP
+	//Imprime primeiro triangulo
+	Print->Face(malha->getCell(id_atual), yellow);
+
+	//Chama metodo para definir inicio
+	if(Interactor->getMouseRight()){
+		getCoordenates();
+		xp = Interactor->getPX();
+		yp = Interactor->getPY();
+		Print->FacesWireframe(malha, grey, 3);
+		glFinish();
+		glutSwapBuffers();
+	}
+
+	//Caminho por coordenadas baricentricas
+	if(xp != Interactor->getPX() || yp != Interactor->getPY()){
+		resolucao(Interactor->getPX(), Interactor->getPY(), id_atual);
+		Print->FacesWireframe(malha, grey, 3);
+		glFinish();
+		glutSwapBuffers();
+	}
+	
 	Print->FacesWireframe(malha,grey,3);
-	
-	
 	glFinish();
 	glutSwapBuffers();
 }
 
 void HandleKeyboard(unsigned char key, int x, int y){	
-	
-	
-	
 	double coords[3];
 	char *xs[10];
 	allCommands->Keyboard(key);
