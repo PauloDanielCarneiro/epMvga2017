@@ -73,6 +73,7 @@ double pontoY = 0.0; // variavel que armazena o pontoY
 2- realiza calculos baricentricos
 3- Procura qual o triangulo que foi clicado
 4- verifica se o ponto clicado pertence ao triangulo atual
+5- Metodo que vai ligar todas as partes anteriores e resolver o problema
 */
 void getCoordenates();
 void baricentrico(double px, double py);
@@ -148,6 +149,52 @@ bool perteceAtual(int& menor, double b1, double b2, double b3){
 	else if (b2 < b1 && b2 < b3) menor = 1;
 	else menor = 2;
 	return false; 
+}
+
+//5- Metodo que vai ligar todas as partes anteriores e resolver o problema
+void resolucao(double xp, double yp, int id){
+	double b1, b2, b3;//coordenadas baricentricas
+	double xa, ya, xb, yb, xc, yc;//triangulo ABC
+	int prox, menor;
+	int vertice[2];
+	bool res;
+
+	b1 = b2 = b3 = -1;
+
+	while(b1 <= 0 || b2 <= 0 || b3 <= 0){
+		//imprime o triangulo atual
+		Print->face(malha->getCell(id), dgreen);
+		//Calcula as coordenadas
+		CalculateBari(xp, yp, id, b1, b2, b3);
+		//verifica qual o triangulo desejado
+		res = perteceAtual(menor, b1, b2, b3);
+		if (res) break;
+		else{
+			//pega o valor do proximo triangulo
+			prox = malha->getCell(id)->getMateId(menor);
+			//verifica se chegou a fronteira
+			if (prox == -1){
+				//Mostra por qual vertice ele saiu
+				switch(menor){
+					case 0:
+						vertice[0] = 1;
+						vertice[1] = 2;
+						break;
+					case 1:
+						vertice[0] = 2;
+						vertice[1] = 0;
+						break;
+					case 2:
+						vertice[0] = 0;
+						vertice[1] = 1;
+						break;
+				}
+				Print->Edge(malha->getVertex(malha->getCell(id)->getVertexId(vertice[0])), malha->getVertex(malha->getCell(id)->getVertexId(vertice[1])), black, 3.0);
+				break
+			}
+		}
+		id = prox;
+	}
 }
 
 void RenderScene(void){ 
