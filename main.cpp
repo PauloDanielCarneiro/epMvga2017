@@ -75,7 +75,7 @@ double pontoY = 0.0; // variavel que armazena o pontoY
 */
 void getCoordenates();
 void baricentrico(double px, double py);
-void CalculateBari(double px, double py, int id, double& b1, double& b2, double& b3);
+void CalculateBari(double xp, double yp, int id, double& b1, double& b2, double& b3);
 
 //Funções
 void getCoordenates(){
@@ -107,7 +107,7 @@ void baricentrico(double px, double py){
 
 }
 
-void CalculateBari(double px, double py, int id, double& b1, double& b2, double& b3){
+void CalculateBari(double xp, double yp, int id, double& b1, double& b2, double& b3){
 	/* A formula para calcularas coordenadas baricentricas se baseia no metodo:
 	1- Obter as coordenadas dos vértices do triangulo
 	2- calcular a area dos triangulos internos com base nas coordenadas dadas 
