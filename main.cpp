@@ -368,7 +368,7 @@ double pontoY = 0.0; // variavel que armazena o pontoY
 3- Procura qual o triangulo que foi clicado
 4- verifica se o ponto clicado pertence ao triangulo atual
 5- Metodo que vai ligar todas as partes anteriores e resolver o problema
-*/
+
 void getCoordenates();
 void baricentrico(double px, double py);
 void CalculateBari(double xp, double yp, int id, double& b1, double& b2, double& b3);
@@ -406,7 +406,7 @@ void CalculateBari(double xp, double yp, int id, double& b1, double& b2, double&
 	1- Obter as coordenadas dos vértices do triangulo
 	2- calcular a area dos triangulos internos com base nas coordenadas dadas 
 	3- Realizar a divisão entre os triangulos para gerar as coordenadas baricentricas
-	*/
+	
 
 	double xa, ya, xb, yb, xc, yc;
 
@@ -435,7 +435,7 @@ bool perteceAtual(int& menor, double b1, double b2, double b3){
 		Para verificar se 9o ponto pertence ao triangulo, 
 		devemos verificar se as coordenadas baricentricas são todas positivas.
 		Caso contrario, deverá sair pelo lado oposto ao vertice de menor valor.
-	*/
+	
 	if (b1 > 0 && b2 > 0 && b3 > 0) return true;
 	else if (b1 < b2 && b1 < b3) menor = 0;
 	else if (b2 < b1 && b2 < b3) menor = 1;
