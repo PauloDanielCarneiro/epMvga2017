@@ -38,7 +38,7 @@ using namespace of;
 
 //Define o tamanho da tela.
 scrInteractor *Interactor = new scrInteractor(800, 600);
-
+/*EP
 //Define a malha a ser usada.
 typedef of::MyofDefault2D TTraits;
 typedef of::ofMesh<TTraits> TMesh;
@@ -54,7 +54,7 @@ typedef CommandComponent TAllCommands;
 
 ofVtkWriter<TTraits> writer;
 TAllCommands *allCommands;
-
+*/
 //##################################################################//
 
 ////////////////////////////////////////////////////////////////////////
