@@ -279,7 +279,8 @@ void scrInteractor::Mouse(int button, int state, int x, int y) /* coordena */
 //	static float wz;
 //	static GLint viewport[4];
 // static GLint my;
-
+	
+	double captura[3];
 	if (state == GLUT_DOWN)
 	{
 		if (pt_mouse.getZero())
@@ -290,7 +291,6 @@ void scrInteractor::Mouse(int button, int state, int x, int y) /* coordena */
 
 		if (button == GLUT_RIGHT_BUTTON)
 			//EP
-			double captura[3];
 			this->ScreenToPoint(this->pt_mouse, captura);
 			PXD = captura[0];
 			PYD = captura[1];
@@ -300,7 +300,6 @@ void scrInteractor::Mouse(int button, int state, int x, int y) /* coordena */
 		if (button == GLUT_LEFT_BUTTON)
 		{
 			//EP
-			double captura[3];
 			this->ScreenToPoint(this->pt_mouse, captura);
 			PX = captura[0];
 			PY = captura[1];
