@@ -199,7 +199,7 @@ void EP(){
 						break;
 					case 2:
 						Print->Edge(malha->getVertex(malha->getCell(id)->getVertexId(0)), malha->getVertex(malha->getCell(id)->getVertexId(1)), black, 3.0);
-						break
+						break;
 				}
               }
           }
