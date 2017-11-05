@@ -63,6 +63,79 @@ int type = 3;
 //CASO 3 EXECUTA ARVORE
 ////////////////////////////////////////////////////////////////////////
 
+int id_atual = 300; // começa no triangulo 1
+double pontoX = 0.0; // variavel que armazena o pontoX 
+double pontoY = 0.0; // variavel que armazena o pontoY
+
+// Declaração das funções:
+/*
+1- captura coordenada
+2- realiza calculos baricentricos
+3- Procura qual o triangulo que foi clicado
+*/
+void getCoordenates();
+void baricentrico(double px, double py);
+void CalculateBari(double px, double py, int id, double& b1, double& b2, double& b3);
+
+//Funções
+void getCoordenates(){
+	double px, py;
+	pontoX = Interactor->getPXD();
+	pontoY = Interactor->getPYD();
+	px = pontoX;
+	py = pontoY;
+	baricentrico(px, py);
+}
+
+void baricentrico(double px, double py){
+	double b1, b2, b3;
+	int i;
+	int cells = malha->getNumberOfCells();//pega o numero de celulas do mapa
+
+	for(i = 0; i < cells; i++){
+		b1 = b2 = b3 = -1;//valor inicial antes do calculo
+		CalculateBari(px, py, i, b1, b2, b3);
+
+		//procura triangulo clicado
+		if(b1 > 0 && b2 > 0 && b3 > 0){
+			id_atual = i;
+			break
+		}else{//clique fora do mapa reseta a função
+			id_atual = 300;
+		}
+	}
+
+}
+
+void CalculateBari(double px, double py, int id, double& b1, double& b2, double& b3){
+	/* A formula para calcularas coordenadas baricentricas se baseia no metodo:
+	1- Obter as coordenadas dos vértices do triangulo
+	2- calcular a area dos triangulos internos com base nas coordenadas dadas 
+	3- Realizar a divisão entre os triangulos para gerar as coordenadas baricentricas
+	*/
+
+	double xa, ya, xb, yb, xc, yc;
+
+	//1- Obter so vértices do triangulo
+	xa = malha->getVertex(malha->getCell(id)getVertexId(0))->getCoord(0);
+	ya = malha->getVertex(malha->getCell(id)getVertexId(0))->getCoord(1);
+	xb = malha->getVertex(malha->getCell(id)getVertexId(1))->getCoord(0);
+	yb = malha->getVertex(malha->getCell(id)getVertexId(1))->getCoord(1);
+	xc = malha->getVertex(malha->getCell(id)getVertexId(2))->getCoord(0);
+	yc = malha->getVertex(malha->getCell(id)getVertexId(2))->getCoord(1);
+
+	//2- calcular a area dos triangulos internos com base nas coordenadas dadas 
+	double ABC = 0.5*((xa*yb)-(ya*xb)+(ya*xc)-(xa*yc)+(xb*yc)-(yb*xc));
+	double PBC = 0.5*((xp*yb)-(yp*xb)+(yp*xc)-(xp*yc)+(xb*yc)-(yb*xc));
+	double APC = 0.5*((xa*yp)-(ya*xp)+(ya*xc)-(xa*yc)+(xp*yc)-(yp*xc));
+	double ABP = 0.5*((xa*yb)-(ya*xb)+(ya*xp)-(xa*yp)+(xb*yp)-(yb*xp));
+
+	//3- Realizar a divisão entre os triangulos para gerar as coordenadas baricentricas
+	b1 = PBC/ABC;
+	b2 = APC/ABC;
+	b3 = ABP/ABC;
+}
+
 void RenderScene(void){ 
 	allCommands->Execute();
 	Print->Vertices(malha,blue,3);
