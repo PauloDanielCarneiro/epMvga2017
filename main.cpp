@@ -127,15 +127,15 @@ void baricentrico(double& b1, double& b2, double& b3, double& xp, double& yp, in
             coord[contador] = malha->getVertex(malha->getCell(i)->getVertexId(aux1))->getCoord(0=aux2);
         }
     }
-    double[3] coordenadas = area(coord, xp, yp);
-    b1 = coordenadas[0];
-    b2 = coordenadas[1];
-    b3 = coordenadas[2];
+    double pontos[3] = area(coord, xp, yp);
+    b1 = pontos[0];
+    b2 = pontos[1];
+    b3 = pontos[2];
     //DETERMINAR AS COORDENDAS BARICENTRICAS
     
 }
 
-double[] area(double[6] coordenadas, double xp, double yp, double& t1, double& t2, double t3, double& t4){
+double area[3](double[6] coordenadas, double xp, double yp, double& t1, double& t2, double t3, double& t4){
     //CALCULAR AS AREAS DOS TRIANGULOS
 
     double A = sqrt(abs(coord[0]-coord[2])*abs(coord[1]-coord[3]));
