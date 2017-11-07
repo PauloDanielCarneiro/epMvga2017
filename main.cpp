@@ -72,7 +72,7 @@ void getInicio(bool clique_direito);
 void getCoordenadas(double& xp, double& yp);
 void verificaPositivo(double& b1,double& b2,double& b3, int i);
 void baricentrico(double& b1, double& b2, double& b3, double& xp, double& yp, int i);
-double[6] area(double* coord, double xp, double yp);
+double* area(double* coord, double xp, double yp);
 void EP();
 
 //[EP] ----REALIZA BUSCA EXAUSTIVA PARA IDENTIFICAR DEFINIR O TRIANGULO DE INICIO----/
