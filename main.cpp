@@ -147,7 +147,7 @@ double area[3](double[6] coordenadas, double xp, double yp, double& t1, double& 
     double SC = 0.5 * (C + B - C);
 
 
-    double[3] baricentros = {(SB*SC), (SC*SA), (SA*SB)};
+    double baricentros[3] = {(SB*SC), (SC*SA), (SA*SB)};
     return baricentros;
     /*
 	double t1 = ((coord[0]*coord[3])-(coord[2]*coord[1])+(coord[2]*coord[4])-(coord[0]*coord[5])+(coord[1]*coord[5])-(coord[3]*coord[4]));
