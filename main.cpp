@@ -72,7 +72,7 @@ void getInicio(bool clique_direito);
 void getCoordenadas(double& xp, double& yp);
 void verificaPositivo(double& b1,double& b2,double& b3, int i);
 void baricentrico(double& b1, double& b2, double& b3, double& xp, double& yp, int i);
-double* area(double* coord, double xp, double yp);
+double[6] area(double* coord, double xp, double yp);
 void EP();
 
 //[EP] ----REALIZA BUSCA EXAUSTIVA PARA IDENTIFICAR DEFINIR O TRIANGULO DE INICIO----/
@@ -119,7 +119,7 @@ void baricentrico(double& b1, double& b2, double& b3, double& xp, double& yp, in
             coord[contador] = malha->getVertex(malha->getCell(i)->getVertexId(aux1))->getCoord(aux2);
         }
     }
-    double* pontos = area(&coord, xp, yp);
+    double[6] pontos = area(coord, xp, yp);
     b1 = pontos[0];
     b2 = pontos[1];
     b3 = pontos[2];
