@@ -116,7 +116,7 @@ void baricentrico(double& b1, double& b2, double& b3, double& xp, double& yp, in
     contador = 0;
     for(aux1 = 0; aux1 < 2; aux1++){
         for(aux2 = 0; aux2 < 2; aux2++){
-            coord[contador] = malha->getVertex(malha->getCell(i)->getVertexId(aux1))->getCoord(0=aux2);
+            coord[contador] = malha->getVertex(malha->getCell(i)->getVertexId(aux1))->getCoord(aux2);
         }
     }
     double pontos[3] = area(coord, xp, yp);
