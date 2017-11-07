@@ -72,7 +72,7 @@ void getInicio(bool clique_direito);
 void getCoordenadas(double& xp, double& yp);
 void verificaPositivo(double& b1,double& b2,double& b3, int i);
 void baricentrico(double& b1, double& b2, double& b3, double& xp, double& yp, int i);
-double* area(double* coord, double xp, double yp);
+void area(double* coord, double xp, double yp, double* baricentros);
 void EP();
 
 //[EP] ----REALIZA BUSCA EXAUSTIVA PARA IDENTIFICAR DEFINIR O TRIANGULO DE INICIO----/
@@ -119,8 +119,8 @@ void baricentrico(double& b1, double& b2, double& b3, double& xp, double& yp, in
             coord[contador] = malha->getVertex(malha->getCell(i)->getVertexId(aux1))->getCoord(aux2);
         }
     }
-    double* pontos = {1.0, 1.0, 1.0};
-    pontos = area(coord, xp, yp);
+    double* pontos;
+    area(coord, xp, yp, pontos);
     b1 = pontos[0];
     b2 = pontos[1];
     b3 = pontos[2];
@@ -128,7 +128,7 @@ void baricentrico(double& b1, double& b2, double& b3, double& xp, double& yp, in
     
 }
 
-double* area(double* coord, double xp, double yp, double& t1, double& t2, double t3, double& t4){
+void area(double* coord, double xp, double yp, double* baricentros){
     //CALCULAR AS AREAS DOS TRIANGULOS
 
     double A = sqrt(abs(coord[0]-coord[2])*abs(coord[1]-coord[3]));
@@ -140,8 +140,9 @@ double* area(double* coord, double xp, double yp, double& t1, double& t2, double
     double SC = 0.5 * (C + B - C);
 
 
-    double baricentros[3] = {(SB*SC), (SC*SA), (SA*SB)};
-    return baricentros;
+    baricentros[0] = (SB*SC);
+    baricentros[1] = (SC*SA);
+    baricentros[2] = (SA*SB);
     /*
 	double t1 = ((coord[0]*coord[3])-(coord[2]*coord[1])+(coord[2]*coord[4])-(coord[0]*coord[5])+(coord[1]*coord[5])-(coord[3]*coord[4]));
 	double t2 = ((xp*coord[3])-(yp*coord[1])+(yp*coord[4])-(xp*coord[5])+(coord[1]*coord[5])-(coord[3]*coord[4]));
