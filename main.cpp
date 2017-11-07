@@ -69,11 +69,11 @@ int type = 3;
 //[EP] ----VARIAVEL QUE CONTROLA O ID DO TRIANGULO INICIAL DE BUSCA----/
 int id_atual = 255;
 void getInicio(bool clique_direito);
-void inicializarBari(double& b1, double& b2, double& b3)
+void inicializarBari(double& b1, double& b2, double& b3);
 void getCoordenadas(double& xp, double& yp);
 void verificaPositivo(double& b1,double& b2,double& b3, int i);
 void baricentrico(double& b1, double& b2, double& b3, double& xp, double& yp, int i);
-double[] area(double[6] coordenadas, double xp, double yp);
+double area[3](double[6] coordenadas, double xp, double yp);
 void EP();
 
 //[EP] ----REALIZA BUSCA EXAUSTIVA PARA IDENTIFICAR DEFINIR O TRIANGULO DE INICIO----/
