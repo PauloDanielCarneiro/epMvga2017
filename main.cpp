@@ -73,7 +73,7 @@ void inicializarBari(double& b1, double& b2, double& b3);
 void getCoordenadas(double& xp, double& yp);
 void verificaPositivo(double& b1,double& b2,double& b3, int i);
 void baricentrico(double& b1, double& b2, double& b3, double& xp, double& yp, int i);
-double* area(double* coordenadas, double xp, double yp);
+double* area(double* coord, double xp, double yp);
 void EP();
 
 //[EP] ----REALIZA BUSCA EXAUSTIVA PARA IDENTIFICAR DEFINIR O TRIANGULO DE INICIO----/
@@ -93,7 +93,7 @@ void getInicio(bool clique_direito)
             //b1 = b2 = b3 = -1; //inicializar valores das coordenadas baricentricas arbitrariamente
             inicializarBari(b1, b2, b3);
             getCoordenadas(xp, yp);
-            baricentro(b1, b2, b3, xp, yp, i);
+            baricentrico(b1, b2, b3, xp, yp, i);
             verificaPositivo(b1, b2, b3, i);
             //ATUALIZA E ENCERRA SE ENCONTRAR TRIANGULO NO PONTO CLICADO
 		i++;
@@ -135,7 +135,7 @@ void baricentrico(double& b1, double& b2, double& b3, double& xp, double& yp, in
     
 }
 
-double* area(double* coordenadas, double xp, double yp, double& t1, double& t2, double t3, double& t4){
+double* area(double* coord, double xp, double yp, double& t1, double& t2, double t3, double& t4){
     //CALCULAR AS AREAS DOS TRIANGULOS
 
     double A = sqrt(abs(coord[0]-coord[2])*abs(coord[1]-coord[3]));
