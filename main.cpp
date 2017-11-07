@@ -69,7 +69,6 @@ int type = 3;
 //[EP] ----VARIAVEL QUE CONTROLA O ID DO TRIANGULO INICIAL DE BUSCA----/
 int id_atual = 255;
 void getInicio(bool clique_direito);
-void inicializarBari(double& b1, double& b2, double& b3);
 void getCoordenadas(double& xp, double& yp);
 void verificaPositivo(double& b1,double& b2,double& b3, int i);
 void baricentrico(double& b1, double& b2, double& b3, double& xp, double& yp, int i);
@@ -90,8 +89,7 @@ void getInicio(bool clique_direito)
             double xp = 0.0; //coordenada x
             double yp = 0.0; //coordenada y
             double b1, b2, b3; //coordenadas baricentricas
-            //b1 = b2 = b3 = -1; //inicializar valores das coordenadas baricentricas arbitrariamente
-            inicializarBari(b1, b2, b3);
+            b1 = b2 = b3 = -1; //inicializar valores das coordenadas baricentricas arbitrariamente
             getCoordenadas(xp, yp);
             baricentrico(b1, b2, b3, xp, yp, i);
             verificaPositivo(b1, b2, b3, i);
@@ -99,12 +97,6 @@ void getInicio(bool clique_direito)
 		i++;
         }
      }
-}
-
-void inicializarBari(double& b1, double& b2, double& b3){
-    b1 = -1;
-    b2 = -1;
-    b3 = -1;
 }
 
 void getCoordenadas(double& xp, double& yp){
@@ -170,7 +162,7 @@ void EP(){
     if (xp != 0.0 && yp != 0.0)
     {    
        double b1, b2, b3; //coordenadas baricentricas
-       inicializarBari(double& b1, double& b2, double& b3);
+       b1 = b2 = b3 = -1;
        //b1 = b2 = b3 = -1; //inicializar valores das coordenadas baricentricas arbitrariamente
 
        while (b1 <= 0 || b2 <= 0 || b3 <= 0)
