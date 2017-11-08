@@ -1,6 +1,3 @@
-#include <stdlib.h>
-#include <math.h>
-
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
@@ -69,8 +66,6 @@ int type = 3;
 //[EP] ----VARIAVEL QUE CONTROLA O ID DO TRIANGULO INICIAL DE BUSCA----/
 int id_atual = 255;
 void getInicio(bool clique_direito);
-void getCoordenadas(double& xp, double& yp);
-void verificaPositivo(double& b1,double& b2,double& b3, int i);
 void baricentrico(double& b1, double& b2, double& b3, double& xp, double& yp, int i);
 void EP();
 
@@ -85,71 +80,53 @@ void getInicio(bool clique_direito)
 		int celulas = malha->getNumberOfCells();
 	    while (i < celulas)
 	    {
-            double xp = 0.0; //coordenada x
-            double yp = 0.0; //coordenada y
+            double xp = Interactor->getPXD(); //coordenada x
+            double yp = Interactor->getPYD(); //coordenada y
             double b1, b2, b3; //coordenadas baricentricas
             b1 = b2 = b3 = -1; //inicializar valores das coordenadas baricentricas arbitrariamente
-            getCoordenadas(xp, yp);
             baricentrico(b1, b2, b3, xp, yp, i);
-            verificaPositivo(b1, b2, b3, i);
             //ATUALIZA E ENCERRA SE ENCONTRAR TRIANGULO NO PONTO CLICADO
+            if (b1 > 0 && b2 > 0 && b3 > 0)
+            {
+				id_atual = i;
+               	return;
+            }
+            //CLIQUE FORA DO MAPA
+            else 
+            {
+				id_atual = 255;
+			}
 		i++;
         }
      }
 }
 
-void getCoordenadas(double& xp, double& yp){
-    xp = Interactor->getPXD();
-    yp = Interactor->getPYD();
-}
-
-void verificaPositivo(double& b1,double& b2,double& b3, int i){
-    (b1 > 0 && b2 > 0 && b3 > 0) ? id_atual = i : id_atual = 255;
-}
-
-
 void baricentrico(double& b1, double& b2, double& b3, double& xp, double& yp, int i){
-	double coord [6]; //coordenadas dos pontos do triangulo ABC
-    //OBTER AS COORDENADAS DOS PONTOS QUE FORMAM UM TRIANGULO----//
-    int aux1, aux2, contador;
-    contador = 0;
-    for(aux1 = 0; aux1 < 2; aux1++){
-        for(aux2 = 0; aux2 < 2; aux2++){
-            coord[contador] = malha->getVertex(malha->getCell(i)->getVertexId(aux1))->getCoord(aux2);
-        }
-    }
-    //Triangulo ABC
-    double ladoAB = sqrt(abs(coord[0]-coord[2])*abs(coord[1]-coord[3]));
-    double ladoAC = sqrt(abs(coord[0]-coord[4])*abs(coord[1]-coord[5]));
-    double ladoBC = sqrt(abs(coord[2]-coord[4])*abs(coord[3]-coord[5]));
-    double areaABC = (ladoAB * ladoAC) / 2.0;
-
-    //Triangulo ABP
-    //double ladoAB = sqrt(abs(coord[0]-coord[2])*abs(coord[1]-coord[3]));
-    double ladoAP = sqrt(abs(coord[0]-xp)*abs(coord[1]-yp));
-    double ladoBP = sqrt(abs(coord[2]-xp)*abs(coord[3]-yp));
-    double areaABP = (ladoAB * ladoAP) / 2;
-
-    //Triangulo APC
-    //double ladoAP = sqrt(abs(coord[0]-coord[2])*abs(coord[1]-coord[3]));
-    //double ladoAC = sqrt(abs(coord[0]-coord[4])*abs(coord[1]-coord[5]));
-    double ladoPC = sqrt(abs(xp-coord[4])*abs(yp-coord[5]));
-    double areaAPC = (ladoAP * ladoAC) / 2;
-
-    //Triangulo PBC
-    double areaPBC = (ladoBP * ladoPC) / 2;
-
-    b1 = areaABP/areaABC;
-    b2 = areaAPC/areaABC;
-    b3 = areaPBC/areaABC;
-    
+	double xa, ya, xb, yb, xc, yc; //coordenadas dos pontos do triangulo ABC
+	//OBTER AS COORDENADAS DOS PONTOS QUE FORMAM UM TRIANGULO----//
+	xa = malha->getVertex(malha->getCell(i)->getVertexId(0))->getCoord(0);
+	ya = malha->getVertex(malha->getCell(i)->getVertexId(0))->getCoord(1);
+	xb = malha->getVertex(malha->getCell(i)->getVertexId(1))->getCoord(0);
+	yb = malha->getVertex(malha->getCell(i)->getVertexId(1))->getCoord(1);
+	xc = malha->getVertex(malha->getCell(i)->getVertexId(2))->getCoord(0);
+	yc = malha->getVertex(malha->getCell(i)->getVertexId(2))->getCoord(1);
+	//CALCULAR AS AREAS DOS TRIANGULOS
+	double ABC = 0.5*((xa*yb)-(ya*xb)+(ya*xc)-(xa*yc)+(xb*yc)-(yb*xc));
+	double PBC = 0.5*((xp*yb)-(yp*xb)+(yp*xc)-(xp*yc)+(xb*yc)-(yb*xc));
+	double APC = 0.5*((xa*yp)-(ya*xp)+(ya*xc)-(xa*yc)+(xp*yc)-(yp*xc));
+	double ABP = 0.5*((xa*yb)-(ya*xb)+(ya*xp)-(xa*yp)+(xb*yp)-(yb*xp));
+	//DETERMINAR AS COORDENDAS BARICENTRICAS
+	b1 = PBC/ABC;
+	b2 = APC/ABC;
+	b3 = ABP/ABC;
 }
 
 //[EP] ----METODO QUE RESOLVE O PROBLEMA PROPOSTO-----------------------------//
 void EP(){
      //----OBTER PONTOS DO CLIQUE DO MOUSE----/
     double xp, yp; //coordenadas do ponto P
-    getCoordenadas(xp, yp);
+    xp = Interactor->getPX();
+    yp = Interactor->getPY();
     
     //----DEFINE O TRIANGULO INICIAL----//
     int id = id_atual;
@@ -158,8 +135,7 @@ void EP(){
     if (xp != 0.0 && yp != 0.0)
     {    
        double b1, b2, b3; //coordenadas baricentricas
-       b1 = b2 = b3 = -1;
-       //b1 = b2 = b3 = -1; //inicializar valores das coordenadas baricentricas arbitrariamente
+       b1 = b2 = b3 = -1; //inicializar valores das coordenadas baricentricas arbitrariamente
 
        while (b1 <= 0 || b2 <= 0 || b3 <= 0)
        {
