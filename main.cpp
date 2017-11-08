@@ -72,7 +72,6 @@ void getInicio(bool clique_direito);
 void getCoordenadas(double& xp, double& yp);
 void verificaPositivo(double& b1,double& b2,double& b3, int i);
 void baricentrico(double& b1, double& b2, double& b3, double& xp, double& yp, int i);
-void area(double* coord, double xp, double yp, double* baricentros);
 void EP();
 
 //[EP] ----REALIZA BUSCA EXAUSTIVA PARA IDENTIFICAR DEFINIR O TRIANGULO DE INICIO----/
@@ -119,36 +118,31 @@ void baricentrico(double& b1, double& b2, double& b3, double& xp, double& yp, in
             coord[contador] = malha->getVertex(malha->getCell(i)->getVertexId(aux1))->getCoord(aux2);
         }
     }
-    double* pontos;
-    area(coord, xp, yp, pontos);
-    b1 = pontos[0];
-    b2 = pontos[1];
-    b3 = pontos[2];
-    //DETERMINAR AS COORDENDAS BARICENTRICAS
+    //Triangulo ABC
+    double ladoAB = sqrt(abs(coord[0]-coord[2])*abs(coord[1]-coord[3]));
+    double ladoAC = sqrt(abs(coord[0]-coord[4])*abs(coord[1]-coord[5]));
+    double ladoBC = sqrt(abs(coord[2]-coord[4])*abs(coord[3]-coord[5]));
+    double areaABC = (ladoAB * ladoAC) / 2.0;
+
+    //Triangulo ABP
+    //double ladoAB = sqrt(abs(coord[0]-coord[2])*abs(coord[1]-coord[3]));
+    double ladoAP = sqrt(abs(coord[0]-xp)*abs(coord[1]-yp));
+    double ladoBP = sqrt(abs(coord[2]-xp)*abs(coord[3]-yp));
+    double areaABP = (ladoAB * ladoAP) / 2;
+
+    //Triangulo APC
+    //double ladoAP = sqrt(abs(coord[0]-coord[2])*abs(coord[1]-coord[3]));
+    //double ladoAC = sqrt(abs(coord[0]-coord[4])*abs(coord[1]-coord[5]));
+    double ladoPC = sqrt(abs(xp-coord[4])*abs(yp-coord[5]));
+    double areaAPC = (ladoAP * ladoAC) / 2;
+
+    //Triangulo PBC
+    double areaPBC = (ladoBP * ladoPC) / 2;
+
+    b1 = areaABP/areaABC;
+    b2 = areaAPC/areaABC;
+    b3 = areaPBC/areaABC;
     
-}
-
-void area(double* coord, double xp, double yp, double* baricentros){
-    //CALCULAR AS AREAS DOS TRIANGULOS
-
-    double A = sqrt(abs(coord[0]-coord[2])*abs(coord[1]-coord[3]));
-    double C = sqrt(abs(coord[0]-coord[4])*abs(coord[1]-coord[5]));
-    double B = sqrt(abs(coord[2]-coord[4])*abs(coord[3]-coord[5]));
-
-    double SA = 0.5 * (-A + B + C);
-    double SB = 0.5 * (A - B + C);
-    double SC = 0.5 * (C + B - C);
-
-
-    baricentros[0] = (SB*SC);
-    baricentros[1] = (SC*SA);
-    baricentros[2] = (SA*SB);
-    /*
-	double t1 = ((coord[0]*coord[3])-(coord[2]*coord[1])+(coord[2]*coord[4])-(coord[0]*coord[5])+(coord[1]*coord[5])-(coord[3]*coord[4]));
-	double t2 = ((xp*coord[3])-(yp*coord[1])+(yp*coord[4])-(xp*coord[5])+(coord[1]*coord[5])-(coord[3]*coord[4]));
-	double t3 = ((coord[0]*yp)-(coord[2]*xp)+(coord[2]*coord[4])-(coord[0]*coord[5])+(xp*coord[5])-(yp*coord[4]));
-	double t4 = ((coord[0]*coord[3])-(coord[2]*coord[1])+(coord[2]*xp)-(coord[0]*yp)+(coord[1]*yp)-(coord[3]*xp));
-	*/
 }
 
 //[EP] ----METODO QUE RESOLVE O PROBLEMA PROPOSTO-----------------------------//
