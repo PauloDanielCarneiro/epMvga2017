@@ -112,13 +112,17 @@ void baricentrico(double& b1, double& b2, double& b3, double& xp, double& yp, in
             coord[contador] = malha->getVertex(malha->getCell(i)->getVertexId(aux))->getCoord(aux2);
             contador++;
         }
-    }
+    }/*
      //triangulo ABC
      double AB = sqrt(pow(coord[0] - coord[2], 2) + pow(coord[1] - coord[3], 2));
      double AC = sqrt(pow(coord[0] - coord[4], 2) + pow(coord[1] - coord[5], 2));
      double BC = sqrt(pow(coord[2] - coord[4], 2) + pow(coord[3] - coord[5], 2));
      double semiABC = (AB + BC + AC) / 2.0;
-     double ABC = (1/4) * sqrt((AB + BC + AC)*(-AB + BC + AC)*(AB - BC + AC)*(AB + BC - AC)); 
+     double ABC = 0.5 */
+     double AB = distance(malha->getVertex(malha->getCell(i)->getVertexId(0)), malha->getVertex(malha->getCell(i)->getVertexId(1)))
+     double AC = distance(malha->getVertex(malha->getCell(i)->getVertexId(1)), malha->getVertex(malha->getCell(i)->getVertexId(2)))
+     double BC = distance(malha->getVertex(malha->getCell(i)->getVertexId(2)), malha->getVertex(malha->getCell(i)->getVertexId(0)))
+
  
      //Triangulo ABP
      double AP = sqrt(pow(coord[0] - xp, 2) + pow(coord[1] - yp, 2));
@@ -135,8 +139,8 @@ void baricentrico(double& b1, double& b2, double& b3, double& xp, double& yp, in
      //Triangulo PBC
      double semiPBC = (CP + BP + BC) / 2.0;
      double PBC = (1/4) * sqrt((BP + BC + CP)*(-BP + BC + CP)*(BP - BC + CP)*(BP + BC - CP)); 
-     
- /*
+ /*    
+ 
 	//CALCULAR AS AREAS DOS TRIANGULOS
 	double ABC = 0.5*((coord[0]*coord[3])-(coord[1]*coord[2])+(coord[1]*coord[4])-(coord[0]*coord[5])+(coord[2]*coord[5])-(coord[3]*coord[4]));
 	double PBC = 0.5*((xp*coord[3])-(yp*coord[2])+(yp*coord[4])-(xp*coord[5])+(coord[2]*coord[5])-(coord[3]*coord[4]));
