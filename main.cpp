@@ -134,20 +134,20 @@ void baricentrico(double& b1, double& b2, double& b3, double& xp, double& yp, in
 
 
      double semiABC = (AB + BC + AC) / 2.0;
-     double ABC = (1/4) * sqrt((AB + BC + AC)*(-AB + BC + AC)*(AB - BC + AC)*(AB + BC - AC));
+     double ABC = (1/4) * std::sqrt((AB + BC + AC)*(-AB + BC + AC)*(AB - BC + AC)*(AB + BC - AC));
  
      //Triangulo ABP
      double semiABP = (AB + BP + AP) / 2.0;
-     double ABP = (1/4) * sqrt((AB + BP + AP)*(-AB + BP + AP)*(AB - BP + AP)*(AB + BP - AP)); 
+     double ABP = (1/4) * std::sqrt((AB + BP + AP)*(-AB + BP + AP)*(AB - BP + AP)*(AB + BP - AP)); 
      
      //Triangulo APC
      double semiAPC = (AC + CP + AP) / 2.0;
-     double APC = (1/4) * sqrt((AP + CP + AC)*(-AP + CP + AC)*(AP - CP + AC)*(AP + CP - AC)); 
+     double APC = (1/4) * std::sqrt((AP + CP + AC)*(-AP + CP + AC)*(AP - CP + AC)*(AP + CP - AC)); 
      
  
      //Triangulo PBC
      double semiPBC = (CP + BP + BC) / 2.0;
-     double PBC = (1/4) * sqrt((BP + BC + CP)*(-BP + BC + CP)*(BP - BC + CP)*(BP + BC - CP)); 
+     double PBC = (1/4) * std::sqrt((BP + BC + CP)*(-BP + BC + CP)*(BP - BC + CP)*(BP + BC - CP)); 
  /*    
  
 	//CALCULAR AS AREAS DOS TRIANGULOS
