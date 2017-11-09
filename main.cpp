@@ -127,7 +127,7 @@ void baricentrico(double& b1, double& b2, double& b3, double& xp, double& yp, in
      double ABC = 0.5 */
      double AB = Distance(coord[0], coord[2], coord[1], coord[3]);
      double AC = Distance(coord[0], coord[4], coord[1], coord[5]);
-     double CB = Distance(coord[2], coord[4], coord[3], coord[5]);
+     double BC = Distance(coord[2], coord[4], coord[3], coord[5]);
      double AP = Distance(coord[0], xp, coord[1], yp);
      double BP = Distance(coord[2], xp, coord[3], yp);
      double CP = Distance(xp, coord[4], yp, coord[5]);
