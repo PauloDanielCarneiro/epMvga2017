@@ -116,23 +116,23 @@ void baricentrico(double& b1, double& b2, double& b3, double& xp, double& yp, in
      double AC = sqrt(pow(abs(coord[0] - coord[4]), 2) + pow(abs(coord[1] - coord[5]), 2));
      double BC = sqrt(pow(abs(coord[2] - coord[4]), 2) + pow(abs(coord[3] - coord[5]), 2));
      double semiABC = (AB + BC + AC) / 2.0;
-     double ABC = (1/4) * sqrt((AB + BC + AC)*(-AB + BC + AC)*(AB - BC + AC)*(AB + BC - AC)) 
+     double ABC = (1/4) * sqrt((AB + BC + AC)*(-AB + BC + AC)*(AB - BC + AC)*(AB + BC - AC)); 
  
      //Triangulo ABP
      double AP = sqrt(pow(abs(coord[0] - xp), 2) + pow(abs(coord[1] - yp), 2));
      double BP = sqrt(pow(abs(coord[2] - xp), 2) + pow(abs(coord[3] - yp), 2));
      double semiABP = (AB + BP + AP) / 2.0;
-     double ABP = (1/4) * sqrt((AB + BP + AP)*(-AB + BP + AP)*(AB - BP + AP)*(AB + BP - AP)) 
+     double ABP = (1/4) * sqrt((AB + BP + AP)*(-AB + BP + AP)*(AB - BP + AP)*(AB + BP - AP)); 
      
      //Triangulo APC
      double CP = sqrt(pow(abs(coord[4] - xp), 2) + pow(abs(coord[5] - yp), 2));
      double semiAPC = (AC + CP + AP) / 2.0;
-     double APC = (1/4) * sqrt((AP + CP + AC)*(-AP + CP + AC)*(AP - CP + AC)*(AP + CP - AC)) 
+     double APC = (1/4) * sqrt((AP + CP + AC)*(-AP + CP + AC)*(AP - CP + AC)*(AP + CP - AC)); 
      
  
      //Triangulo PBC
      double semiPBC = (CP + BP + BC) / 2.0;
-     double PBC = (1/4) * sqrt((BP + BC + CP)*(-BP + BC + CP)*(BP - BC + CP)*(BP + BC - CP)) 
+     double PBC = (1/4) * sqrt((BP + BC + CP)*(-BP + BC + CP)*(BP - BC + CP)*(BP + BC - CP)); 
      
  /*
 	//CALCULAR AS AREAS DOS TRIANGULOS
