@@ -124,30 +124,31 @@ void baricentrico(double& b1, double& b2, double& b3, double& xp, double& yp, in
      double AC = sqrt(pow(coord[0] - coord[4], 2) + pow(coord[1] - coord[5], 2));
      double BC = sqrt(pow(coord[2] - coord[4], 2) + pow(coord[3] - coord[5], 2));
      double semiABC = (AB + BC + AC) / 2.0;
-     double ABC = 0.5 */
+     double ABC = 0.5 
      double AB = Distance(coord[0], coord[2], coord[1], coord[3]);
      double AC = Distance(coord[0], coord[4], coord[1], coord[5]);
      double BC = Distance(coord[2], coord[4], coord[3], coord[5]);
      double AP = Distance(coord[0], xp, coord[1], yp);
      double BP = Distance(coord[2], xp, coord[3], yp);
-     double CP = Distance(xp, coord[4], yp, coord[5]);
+     double CP = Distance(xp, coord[4], yp, coord[5]);*/
 
 
      double semiABC = (AB + BC + AC) / 2.0;
-     double ABC = (1/4) * std::sqrt((AB + BC + AC)*(-AB + BC + AC)*(AB - BC + AC)*(AB + BC - AC));
+     //area = std::abs(x0 * (y1 - y2) + x1 * (y2 - y0) + x2 * (y0 - y1)) / 2;
+     double ABC = std::abs(coord[0] * (coord[3] - coord[5]) + coord[2] * (coord[3] - coord[1]) + coord[4] * (coord[1] - coord[5])) / 2;
  
      //Triangulo ABP
      double semiABP = (AB + BP + AP) / 2.0;
-     double ABP = (1/4) * std::sqrt((AB + BP + AP)*(-AB + BP + AP)*(AB - BP + AP)*(AB + BP - AP)); 
+     double ABP = std::abs(coord[0] * (coord[3] - yp) + coord[2] * (coord[3] - coord[1]) + xp * (coord[1] - yp)) / 2;
      
      //Triangulo APC
      double semiAPC = (AC + CP + AP) / 2.0;
-     double APC = (1/4) * std::sqrt((AP + CP + AC)*(-AP + CP + AC)*(AP - CP + AC)*(AP + CP - AC)); 
+     double APC = std::abs(coord[0] * (yp - coord[5]) + xp * (yp - coord[1]) + coord[4] * (coord[1] - coord[5])) / 2;
      
  
      //Triangulo PBC
      double semiPBC = (CP + BP + BC) / 2.0;
-     double PBC = (1/4) * std::sqrt((BP + BC + CP)*(-BP + BC + CP)*(BP - BC + CP)*(BP + BC - CP)); 
+     double PBC = std::abs(xp * (coord[3] - coord[5]) + coord[2] * (coord[3] - yp) + coord[4] * (yp - coord[5])) / 2;
  /*    
  
 	//CALCULAR AS AREAS DOS TRIANGULOS
