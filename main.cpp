@@ -68,6 +68,7 @@ int type = 3;
 //triangulo de busca
 int id_atual = 255;
 void getInicio(bool clique_direito);
+double Distance(double dX0, double dY0, double dX1, double dY1);
 void baricentrico(double& b1, double& b2, double& b3, double& xp, double& yp, int i);
 void EP();
 
@@ -101,6 +102,11 @@ void getInicio(bool clique_direito)
      }
 }
 
+double Distance(double dX0, double dY0, double dX1, double dY1){
+    return sqrt(abs(dX1 - dX0)*abs(dX1 - dX0) + abs(dY1 - dY0)*abs(dY1 - dY0));
+}
+
+
 void baricentrico(double& b1, double& b2, double& b3, double& xp, double& yp, int i){
     double xa, ya, xb, yb, xc, yc; //coordenadas dos pontos do triangulo ABC
     double coord[6];
@@ -119,20 +125,22 @@ void baricentrico(double& b1, double& b2, double& b3, double& xp, double& yp, in
      double BC = sqrt(pow(coord[2] - coord[4], 2) + pow(coord[3] - coord[5], 2));
      double semiABC = (AB + BC + AC) / 2.0;
      double ABC = 0.5 */
-     double AB = distance(malha->getVertex(malha->getCell(i)->getVertexId(0)), malha->getVertex(malha->getCell(i)->getVertexId(1)));
-     double AC = distance(malha->getVertex(malha->getCell(i)->getVertexId(1)), malha->getVertex(malha->getCell(i)->getVertexId(2)));
-     double BC = distance(malha->getVertex(malha->getCell(i)->getVertexId(2)), malha->getVertex(malha->getCell(i)->getVertexId(0)));
+     double AB = Distance(coord[0], coord[2], coord[1], coord[3]);
+     double AC = Distance(coord[0], coord[4], coord[1], coord[5]);
+     double CB = Distance(coord[2], coord[4], coord[3], coord[5]);
+     double AP = Distance(coord[0], xp, coord[1], yp);
+     double BP = Distance(coord[2], xp, coord[3], yp);
+     double CP = Distance(xp, coord[4], yp, coord[5]);
+
+
      double semiABC = (AB + BC + AC) / 2.0;
      double ABC = (1/4) * sqrt((AB + BC + AC)*(-AB + BC + AC)*(AB - BC + AC)*(AB + BC - AC));
  
      //Triangulo ABP
-     double AP = sqrt(pow(coord[0] - xp, 2) + pow(coord[1] - yp, 2));
-     double BP = sqrt(pow(coord[2] - xp, 2) + pow(coord[3] - yp, 2));
      double semiABP = (AB + BP + AP) / 2.0;
      double ABP = (1/4) * sqrt((AB + BP + AP)*(-AB + BP + AP)*(AB - BP + AP)*(AB + BP - AP)); 
      
      //Triangulo APC
-     double CP = sqrt(pow(coord[4] - xp, 2) + pow(coord[5] - yp, 2));
      double semiAPC = (AC + CP + AP) / 2.0;
      double APC = (1/4) * sqrt((AP + CP + AC)*(-AP + CP + AC)*(AP - CP + AC)*(AP + CP - AC)); 
      
