@@ -140,7 +140,7 @@ void baricentrico(double& b1, double& b2, double& b3, double& xp, double& yp, in
 	double PBC = 0.5*((xp*coord[3])-(yp*coord[2])+(yp*coord[4])-(xp*coord[5])+(coord[2]*coord[5])-(coord[3]*coord[4]));
 	double APC = 0.5*((coord[0]*yp)-(coord[1]*xp)+(coord[1]*coord[4])-(coord[0]*coord[5])+(xp*coord[5])-(yp*coord[4]));
 	double ABP = 0.5*((coord[0]*coord[3])-(coord[1]*coord[2])+(coord[1]*xp)-(coord[0]*yp)+(coord[2]*yp)-(coord[3]*xp));
-	///DETERMINAR AS COORDENDAS BARICENTRICAS
+	*///DETERMINAR AS COORDENDAS BARICENTRICAS
 	b1 = PBC/ABC;
 	b2 = APC/ABC;
 	b3 = ABP/ABC;
