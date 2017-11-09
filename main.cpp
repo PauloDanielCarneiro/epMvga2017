@@ -103,7 +103,7 @@ void getInicio(bool clique_direito)
 }
 
 double Distance(double dX0, double dY0, double dX1, double dY1){
-    return sqrt(abs(dX1 - dX0)*abs(dX1 - dX0) + abs(dY1 - dY0)*abs(dY1 - dY0));
+    return sqrt(fabs(dX1 - dX0)*abs(dX1 - dX0) + abs(dY1 - dY0)*abs(dY1 - dY0));
 }
 
 
@@ -120,12 +120,12 @@ void baricentrico(double& b1, double& b2, double& b3, double& xp, double& yp, in
         }
     }*/
     
-    double x0 = malha->getVertex(malha->getCell(i)->getVertexId(0))->getCoord(0);
-    double x1 = malha->getVertex(malha->getCell(i)->getVertexId(1))->getCoord(0);
-    double x2 = malha->getVertex(malha->getCell(i)->getVertexId(2))->getCoord(0);
-    double y0 = malha->getVertex(malha->getCell(i)->getVertexId(0))->getCoord(1);
-    double y1 = malha->getVertex(malha->getCell(i)->getVertexId(1))->getCoord(1);
-    double y2 = malha->getVertex(malha->getCell(i)->getVertexId(2))->getCoord(1);
+    double x1 = malha->getVertex(malha->getCell(i)->getVertexId(0))->getCoord(0);
+    double x2 = malha->getVertex(malha->getCell(i)->getVertexId(1))->getCoord(0);
+    double x3 = malha->getVertex(malha->getCell(i)->getVertexId(2))->getCoord(0);
+    double y1 = malha->getVertex(malha->getCell(i)->getVertexId(0))->getCoord(1);
+    double y2 = malha->getVertex(malha->getCell(i)->getVertexId(1))->getCoord(1);
+    double y3 = malha->getVertex(malha->getCell(i)->getVertexId(2))->getCoord(1);
     
     /*
      //triangulo ABC
@@ -144,20 +144,36 @@ void baricentrico(double& b1, double& b2, double& b3, double& xp, double& yp, in
 
      //double semiABC = (AB + BC + AC) / 2.0;
      //area = std::abs(x0 * (y1 - y2) + x1 * (y2 - y0) + x2 * (y0 - y1)) / 2;
-     double ABC = fabs((x0 - x2) * (y1 - y0) - (x0 - x1) * (y2 - y0) ) / 2;
+     double side_1=pow(pow((x2-x1), 2) + pow((y2-y1), 2), 0.5); /*Calculate length of side 1*/
+     double side_2=pow(pow((x3-x2), 2) + pow((y3-y2), 2), 0.5); /*Calculate length of side 2*/
+     double side_3=pow(pow((x3-x1), 2) + pow((y3-y1), 2), 0.5); /*Calculate length of side 3*/
+ 
+ 
+     double ABC = 0.25*pow(pow(pow(side_1, 2) + pow(side_2, 2) + pow(side_3, 2), 2) - 2*(pow(side_1, 4) + pow(side_2, 4) + pow(side_3, 4)), 0.5); /*Area of triangle using Heron's formula*/
  
      //Triangulo ABP
      //double semiABP = (AB + BP + AP) / 2.0;
-     double ABP = fabs((x0 - xp) * (y1 - y0) - (x0 - x1) * (yp - y0) ) / 2;
+     double side_1ABP=pow(pow((x2-x1), 2) + pow((y2-y1), 2), 0.5); /*Calculate length of side 1*/
+     double side_2ABP=pow(pow((xp-x2), 2) + pow((yp-y2), 2), 0.5); /*Calculate length of side 2*/
+     double side_3ABP=pow(pow((xp-x1), 2) + pow((yp-y1), 2), 0.5); /*Calculate length of side 3*/
+
+     double ABP = 0.25*pow(pow(pow(side_1ABP, 2) + pow(side_2ABP, 2) + pow(side_3ABP, 2), 2) - 2*(pow(side_1ABP, 4) + pow(side_2ABP, 4) + pow(side_3ABP, 4)), 0.5); /*Area of triangle using Heron's formula*/
      
      //Triangulo APC
      //double semiAPC = (AC + CP + AP) / 2.0;
-     double APC = fabs((x0 - x2) * (yp - y0) - (x0 - xp) * (y2 - y0) ) / 2;
+     double side_1APC=pow(pow((xp-x1), 2) + pow((yp-y1), 2), 0.5); /*Calculate length of side 1*/
+     double side_2APC=pow(pow((x3-xp), 2) + pow((y3-yp), 2), 0.5); /*Calculate length of side 2*/
+     double side_3APC=pow(pow((x3-x1), 2) + pow((y3-y1), 2), 0.5); /*Calculate length of side 3*/
+
+     double APC = 0.25*pow(pow(pow(side_1APC, 2) + pow(side_2APC, 2) + pow(side_3APC, 2), 2) - 2*(pow(side_1APC, 4) + pow(side_2APC, 4) + pow(side_3APC, 4)), 0.5); /*Area of triangle using Heron's formula*/
      
- 
      //Triangulo PBC
      //double semiPBC = (CP + BP + BC) / 2.0;
-     double PBC = fabs((xp - x2) * (y1 - yp) - (xp - x1) * (y2 - yp) ) / 2;
+     double side_1PBC=pow(pow((x2-xp), 2) + pow((y2-yp), 2), 0.5); /*Calculate length of side 1*/
+     double side_2PBC=pow(pow((x3-x2), 2) + pow((y3-y2), 2), 0.5); /*Calculate length of side 2*/
+     double side_3PBC=pow(pow((x3-xp), 2) + pow((y3-yp), 2), 0.5); /*Calculate length of side 3*/
+
+     double PBC = 0.25*pow(pow(pow(side_1PBC, 2) + pow(side_2PBC, 2) + pow(side_3PBC, 2), 2) - 2*(pow(side_1PBC, 4) + pow(side_2PBC, 4) + pow(side_3PBC, 4)), 0.5); /*Area of triangle using Heron's formula*/
      /*
  
 	//CALCULAR AS AREAS DOS TRIANGULOS
