@@ -108,8 +108,9 @@ void baricentrico(double& b1, double& b2, double& b3, double& xp, double& yp, in
     for (aux = 0; aux <= 2; aux++){
         for(aux2 = 0; aux2 <= 1; aux2++){
             coord[contador] = malha->getVertex(malha->getCell(i)->getVertexId(aux))->getCoord(aux2);
+            contador++;
         }
-    }/*
+    }
      //triangulo ABC
      double AB = sqrt(pow(abs(coord[0] - coord[2]), 2) + pow(abs(coord[1] - coord[3]), 2));
      double AC = sqrt(pow(abs(coord[0] - coord[4]), 2) + pow(abs(coord[1] - coord[5]), 2));
@@ -131,13 +132,13 @@ void baricentrico(double& b1, double& b2, double& b3, double& xp, double& yp, in
      //Triangulo PBC
      double semiPBC = (CP + BP + BC) / 2.0;
      double PBC = sqrt(semiPBC * abs(semiPBC  - AP) * abs(semiPBC - AB) * abs(semiPBC - BP));
- */
+ /*
 	//CALCULAR AS AREAS DOS TRIANGULOS
 	double ABC = 0.5*((xa*yb)-(ya*xb)+(ya*xc)-(xa*yc)+(xb*yc)-(yb*xc));
 	double PBC = 0.5*((xp*yb)-(yp*xb)+(yp*xc)-(xp*yc)+(xb*yc)-(yb*xc));
 	double APC = 0.5*((xa*yp)-(ya*xp)+(ya*xc)-(xa*yc)+(xp*yc)-(yp*xc));
 	double ABP = 0.5*((xa*yb)-(ya*xb)+(ya*xp)-(xa*yp)+(xb*yp)-(yb*xp));
-	//DETERMINAR AS COORDENDAS BARICENTRICAS
+	*///DETERMINAR AS COORDENDAS BARICENTRICAS
 	b1 = PBC/ABC;
 	b2 = APC/ABC;
 	b3 = ABP/ABC;
