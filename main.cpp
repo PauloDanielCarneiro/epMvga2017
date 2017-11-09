@@ -63,15 +63,13 @@ int type = 3;
 //CASO 3 EXECUTA ARVORE
 ////////////////////////////////////////////////////////////////////////
 
-//[EP] ----VARIAVEL QUE CONTROLA O ID DO TRIANGULO INICIAL DE BUSCA----/
+//triangulo de busca
 int id_atual = 255;
 void getInicio(bool clique_direito);
 void baricentrico(double& b1, double& b2, double& b3, double& xp, double& yp, int i);
 void EP();
 
-//[EP] ----REALIZA BUSCA EXAUSTIVA PARA IDENTIFICAR DEFINIR O TRIANGULO DE INICIO----/
-//Obs.: Poderia ser feita mudan�a na estrutura de Cell para incluir um campo visitada
-//e utilizar o algoritmo mais eficiente do EP
+//Identificar triangulo de inicio
 void getInicio(bool clique_direito)
 {
      if (clique_direito)
@@ -85,13 +83,13 @@ void getInicio(bool clique_direito)
             double b1, b2, b3; //coordenadas baricentricas
             b1 = b2 = b3 = -1; //inicializar valores das coordenadas baricentricas arbitrariamente
             baricentrico(b1, b2, b3, xp, yp, i);
-            //ATUALIZA E ENCERRA SE ENCONTRAR TRIANGULO NO PONTO CLICADO
+            //Procura triangujlo clicado
             if (b1 > 0 && b2 > 0 && b3 > 0)
             {
 				id_atual = i;
                	return;
             }
-            //CLIQUE FORA DO MAPA
+            //reseta fora do mapa
             else 
             {
 				id_atual = 255;
@@ -102,20 +100,47 @@ void getInicio(bool clique_direito)
 }
 
 void baricentrico(double& b1, double& b2, double& b3, double& xp, double& yp, int i){
-	double xa, ya, xb, yb, xc, yc; //coordenadas dos pontos do triangulo ABC
-	//OBTER AS COORDENADAS DOS PONTOS QUE FORMAM UM TRIANGULO----//
-	xa = malha->getVertex(malha->getCell(i)->getVertexId(0))->getCoord(0);
-	ya = malha->getVertex(malha->getCell(i)->getVertexId(0))->getCoord(1);
-	xb = malha->getVertex(malha->getCell(i)->getVertexId(1))->getCoord(0);
-	yb = malha->getVertex(malha->getCell(i)->getVertexId(1))->getCoord(1);
-	xc = malha->getVertex(malha->getCell(i)->getVertexId(2))->getCoord(0);
-	yc = malha->getVertex(malha->getCell(i)->getVertexId(2))->getCoord(1);
-	//CALCULAR AS AREAS DOS TRIANGULOS
+    double xa, ya, xb, yb, xc, yc; //coordenadas dos pontos do triangulo ABC
+    double coord[6];
+    //OBTER AS COORDENADAS DOS PONTOS QUE FORMAM UM TRIANGULO----//
+    int aux, aux2;
+    int contador = 0;
+    for (aux = 0; aux <= 2; aux++){
+        for(aux2 = 0; aux2 <= 1; aux2++){
+            coord[contador] = malha->getVertex(malha->getCell(i)->getVertexId(aux))->getCoord(aux2);
+        }
+    }
+
+    //triangulo ABC
+    double AB = sqrt(pow(abs(coord[0] - coord[2]), 2) + pow(abs(coord[1] - coord[3]), 2));
+    double AC = sqrt(pow(abs(coord[0] - coord[4]), 2) + pow(abs(coord[1] - coord[5]), 2));
+    double BC = sqrt(pow(abs(coord[2] - coord[4]), 2) + pow(abs(coord[3] - coord[5]), 2));
+    double semiABC = (AB + BC + AC) / 2.0;
+    double ABC = sqrt(semiABC * abs(semiABC - AB) * abs(semiABC - BC) * abs(semiABC - AC));
+
+    //Triangulo ABP
+    double AP = sqrt(pow(abs(coord[0] - xp), 2) + pow(abs(coord[1] - yp), 2));
+    double BP = sqrt(pow(abs(coord[2] - xp), 2) + pow(abs(coord[3] - yp), 2));
+    double semiABP = (AB + BP + AP) / 2.0;
+    double ABP = sqrt(semiABP * abs(semiABP - AP) * abs(semiABP - BP) * abs(semiABP - AB));
+
+    //Triangulo APC
+    double CP = sqrt(pow(abs(coord[4] - xp), 2) + pow(abs(coord[5] - yp), 2));
+    double semiAPC = (AC + CP + AP) / 2.0;
+    double APC = sqrt(semiABP * abs(semiABP - AP) * abs(semiABP - CP) * abs(semiABP - AC));
+
+    //Triangulo PBC
+    double semiPBC = (CP + BP + BC) / 2.0;
+    double PBC = sqrt(semiPBC * abs(semiPBC  - AP) * abs(semiPBC - AB) * abs(semiPBC - BP));
+
+    //CALCULAR AS AREAS DOS TRIANGULOS
+    /*
 	double ABC = 0.5*((xa*yb)-(ya*xb)+(ya*xc)-(xa*yc)+(xb*yc)-(yb*xc));
 	double PBC = 0.5*((xp*yb)-(yp*xb)+(yp*xc)-(xp*yc)+(xb*yc)-(yb*xc));
 	double APC = 0.5*((xa*yp)-(ya*xp)+(ya*xc)-(xa*yc)+(xp*yc)-(yp*xc));
 	double ABP = 0.5*((xa*yb)-(ya*xb)+(ya*xp)-(xa*yp)+(xb*yp)-(yb*xp));
-	//DETERMINAR AS COORDENDAS BARICENTRICAS
+    */
+    //DETERMINAR AS COORDENDAS BARICENTRICAS
 	b1 = PBC/ABC;
 	b2 = APC/ABC;
 	b3 = ABP/ABC;
