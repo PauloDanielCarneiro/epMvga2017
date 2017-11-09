@@ -122,7 +122,8 @@ void baricentrico(double& b1, double& b2, double& b3, double& xp, double& yp, in
      double AB = distance(malha->getVertex(malha->getCell(i)->getVertexId(0)), malha->getVertex(malha->getCell(i)->getVertexId(1)))
      double AC = distance(malha->getVertex(malha->getCell(i)->getVertexId(1)), malha->getVertex(malha->getCell(i)->getVertexId(2)))
      double BC = distance(malha->getVertex(malha->getCell(i)->getVertexId(2)), malha->getVertex(malha->getCell(i)->getVertexId(0)))
-
+     double semiABC = (AB + BC + AC) / 2.0;
+     double ABC = (1/4) * sqrt((AB + BC + AC)*(-AB + BC + AC)*(AB - BC + AC)*(AB + BC - AC));
  
      //Triangulo ABP
      double AP = sqrt(pow(coord[0] - xp, 2) + pow(coord[1] - yp, 2));
