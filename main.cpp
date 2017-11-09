@@ -113,12 +113,21 @@ void baricentrico(double& b1, double& b2, double& b3, double& xp, double& yp, in
     //OBTER AS COORDENADAS DOS PONTOS QUE FORMAM UM TRIANGULO----//
     int aux, aux2;
     int contador = 0;
-    for (aux = 0; aux <= 2; aux++){
+    /*for (aux = 0; aux <= 2; aux++){
         for(aux2 = 0; aux2 <= 1; aux2++){
             coord[contador] = malha->getVertex(malha->getCell(i)->getVertexId(aux))->getCoord(aux2);
             contador++;
         }
-    }/*
+    }*/
+    
+    double x1 = malha->getVertex(malha->getCell(i)->getVertexId(0))->getCoord(0);
+    double x2 = malha->getVertex(malha->getCell(i)->getVertexId(1))->getCoord(0);
+    double x3 = malha->getVertex(malha->getCell(i)->getVertexId(2))->getCoord(0);
+    double y0 = malha->getVertex(malha->getCell(i)->getVertexId(0))->getCoord(1);
+    double y1 = malha->getVertex(malha->getCell(i)->getVertexId(1))->getCoord(1);
+    double y2 = malha->getVertex(malha->getCell(i)->getVertexId(2))->getCoord(1);
+    
+    /*
      //triangulo ABC
      double AB = sqrt(pow(coord[0] - coord[2], 2) + pow(coord[1] - coord[3], 2));
      double AC = sqrt(pow(coord[0] - coord[4], 2) + pow(coord[1] - coord[5], 2));
@@ -135,21 +144,21 @@ void baricentrico(double& b1, double& b2, double& b3, double& xp, double& yp, in
 
      //double semiABC = (AB + BC + AC) / 2.0;
      //area = std::abs(x0 * (y1 - y2) + x1 * (y2 - y0) + x2 * (y0 - y1)) / 2;
-     double ABC = std::abs(coord[0] * (coord[3] - coord[5]) + coord[2] * (coord[3] - coord[1]) + coord[4] * (coord[1] - coord[5])) / 2;
+     double ABC = fabs((x0 - x2) * (y1 - y0) - (x0 - x1) * (y2 - y0) ) / 2;
  
      //Triangulo ABP
      //double semiABP = (AB + BP + AP) / 2.0;
-     double ABP = std::abs(coord[0] * (coord[3] - yp) + coord[2] * (coord[3] - coord[1]) + xp * (coord[1] - yp)) / 2;
+     double ABP = fabs((x0 - xp) * (y1 - y0) - (x0 - x1) * (yp - y0) ) / 2;
      
      //Triangulo APC
      //double semiAPC = (AC + CP + AP) / 2.0;
-     double APC = std::abs(coord[0] * (yp - coord[5]) + xp * (yp - coord[1]) + coord[4] * (coord[1] - coord[5])) / 2;
+     double APC = fabs((x0 - x2) * (yp - y0) - (x0 - xp) * (y2 - y0) ) / 2;
      
  
      //Triangulo PBC
      //double semiPBC = (CP + BP + BC) / 2.0;
-     double PBC = std::abs(xp * (coord[3] - coord[5]) + coord[2] * (coord[3] - yp) + coord[4] * (yp - coord[5])) / 2;
- /*    
+     double PBC = fabs((xp - x2) * (y1 - yp) - (xp - x1) * (y2 - yp) ) / 2;
+     /*
  
 	//CALCULAR AS AREAS DOS TRIANGULOS
 	double ABC = 0.5*((coord[0]*coord[3])-(coord[1]*coord[2])+(coord[1]*coord[4])-(coord[0]*coord[5])+(coord[2]*coord[5])-(coord[3]*coord[4]));
