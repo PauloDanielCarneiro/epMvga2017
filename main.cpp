@@ -120,9 +120,9 @@ void baricentrico(double& b1, double& b2, double& b3, double& xp, double& yp, in
         }
     }*/
     
-    double x1 = malha->getVertex(malha->getCell(i)->getVertexId(0))->getCoord(0);
-    double x2 = malha->getVertex(malha->getCell(i)->getVertexId(1))->getCoord(0);
-    double x3 = malha->getVertex(malha->getCell(i)->getVertexId(2))->getCoord(0);
+    double x0 = malha->getVertex(malha->getCell(i)->getVertexId(0))->getCoord(0);
+    double x1 = malha->getVertex(malha->getCell(i)->getVertexId(1))->getCoord(0);
+    double x2 = malha->getVertex(malha->getCell(i)->getVertexId(2))->getCoord(0);
     double y0 = malha->getVertex(malha->getCell(i)->getVertexId(0))->getCoord(1);
     double y1 = malha->getVertex(malha->getCell(i)->getVertexId(1))->getCoord(1);
     double y2 = malha->getVertex(malha->getCell(i)->getVertexId(2))->getCoord(1);
