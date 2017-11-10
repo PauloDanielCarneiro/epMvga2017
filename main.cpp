@@ -123,10 +123,10 @@ void baricentrico(double& b1, double& b2, double& b3, double& xp, double& yp, in
     
     
     //ABC
-    double ABC = ((x1 * y2) + (x2 * y3) + (x3 * y1) − (x1 * y3) − (x3 * y2) − (x2 * y1)) * 0.5;
-    double ABP = ((x1 * y2) + (x2 * yp) + (xp * y1) − (x1 * yp) − (xp * y2) − (x2 * y1)) * 0.5;
-    double APC = ((x1 * yp) + (xp * y3) + (x3 * y1) − (x1 * y3) − (x3 * yp) − (xp * y1)) * 0.5;
-    double PBC = ((xp * y2) + (x2 * y3) + (x3 * yp) − (xp * y3) − (x3 * y2) − (x2 * yp)) * 0.5;
+    double ABC = ((x1 * y2) + (x2 * y3) + (x3 * y1) - (x1 * y3) - (x3 * y2) - (x2 * y1)) * 0.5;
+    double ABP = ((x1 * y2) + (x2 * yp) + (xp * y1) - (x1 * yp) - (xp * y2) - (x2 * y1)) * 0.5;
+    double APC = ((x1 * yp) + (xp * y3) + (x3 * y1) - (x1 * y3) - (x3 * yp) - (xp * y1)) * 0.5;
+    double PBC = ((xp * y2) + (x2 * y3) + (x3 * yp) - (xp * y3) - (x3 * y2) - (x2 * yp)) * 0.5;
     
     /*
  
