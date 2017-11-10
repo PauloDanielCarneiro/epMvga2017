@@ -32,13 +32,13 @@ double scrInteractor::getPYD(){
 	return PYD;
 }
 
-void getScreenPointOrigem(){
+void scrInteractor::getScreenPointOrigem(){
 	this->ScreenToPoint(this->pt_mouse, captura);
 	PXD = captura[0];
 	PYD = captura[1];
 }
 
-void getScreenPointFinal(){
+void scrInteractor::getScreenPointFinal(){
 	this->ScreenToPoint(this->pt_mouse, captura);
 	PX = captura[0];
 	PY = captura[1];
