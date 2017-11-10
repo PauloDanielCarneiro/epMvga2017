@@ -114,20 +114,32 @@ void baricentrico(double& b1, double& b2, double& b3, double& xp, double& yp, in
     int aux, aux2;
     int contador = 0;
     
+    for(aux = 0; aux <= 2; aux++){
+        for(aux2 = 0; aux2 <= 1; aux2++){
+            coord[contador] = malha->getVertex(malha->getCell(i)->getVertexId(aux))->getCoord(aux2);
+            contador++;
+        }
+    }
+/*
     double x1 = malha->getVertex(malha->getCell(i)->getVertexId(0))->getCoord(0);
     double x2 = malha->getVertex(malha->getCell(i)->getVertexId(1))->getCoord(0);
     double x3 = malha->getVertex(malha->getCell(i)->getVertexId(2))->getCoord(0);
     double y1 = malha->getVertex(malha->getCell(i)->getVertexId(0))->getCoord(1);
     double y2 = malha->getVertex(malha->getCell(i)->getVertexId(1))->getCoord(1);
     double y3 = malha->getVertex(malha->getCell(i)->getVertexId(2))->getCoord(1);
-    
+  
     
     //ABC
     double ABC = ((x1 * y2) + (x2 * y3) + (x3 * y1) - (x1 * y3) - (x3 * y2) - (x2 * y1)) * 0.5;
     double ABP = ((x1 * y2) + (x2 * yp) + (xp * y1) - (x1 * yp) - (xp * y2) - (x2 * y1)) * 0.5;
     double APC = ((x1 * yp) + (xp * y3) + (x3 * y1) - (x1 * y3) - (x3 * yp) - (xp * y1)) * 0.5;
     double PBC = ((xp * y2) + (x2 * y3) + (x3 * yp) - (xp * y3) - (x3 * y2) - (x2 * yp)) * 0.5;
-    
+  */  
+  
+    double ABC = ((coord[0] * coord[3]) + (coord[2] * coord[5]) + (coord[4] * coord[1]) - (coord[0] * coord[5]) - (coord[4] * coord[3]) - (coord[2] * coord[1])) * 0.5;
+    double ABP = ((coord[0] * coord[3]) + (coord[2] * yp) + (xp * coord[1]) - (coord[0] * yp) - (xp * coord[3]) - (coord[2] * coord[1])) * 0.5;
+    double APC = ((coord[0] * yp) + (xp * coord[5]) + (coord[4] * coord[1]) - (coord[0] * coord[5]) - (coord[4] * yp) - (xp * coord[1])) * 0.5;
+    double PBC = ((xp * coord[3]) + (coord[2] * coord[5]) + (coord[4] * yp) - (xp * coord[5]) - (coord[4] * coord[3]) - (coord[2] * yp)) * 0.5;
     /*
  
 	//CALCULAR AS AREAS DOS TRIANGULOS
