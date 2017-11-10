@@ -103,7 +103,7 @@ void getInicio(bool clique_direito)
 }
 
 double Distance(double dX0, double dY0, double dX1, double dY1){
-    return sqrt(fabs(dX1 - dX0)*abs(dX1 - dX0) + abs(dY1 - dY0)*abs(dY1 - dY0));
+    return sqrt(fabs(dX1 - dX0)*fabs(dX1 - dX0) + fabs(dY1 - dY0)*fabs(dY1 - dY0));
 }
 
 
@@ -113,12 +113,6 @@ void baricentrico(double& b1, double& b2, double& b3, double& xp, double& yp, in
     //OBTER AS COORDENADAS DOS PONTOS QUE FORMAM UM TRIANGULO----//
     int aux, aux2;
     int contador = 0;
-    /*for (aux = 0; aux <= 2; aux++){
-        for(aux2 = 0; aux2 <= 1; aux2++){
-            coord[contador] = malha->getVertex(malha->getCell(i)->getVertexId(aux))->getCoord(aux2);
-            contador++;
-        }
-    }*/
     
     double x1 = malha->getVertex(malha->getCell(i)->getVertexId(0))->getCoord(0);
     double x2 = malha->getVertex(malha->getCell(i)->getVertexId(1))->getCoord(0);
@@ -127,54 +121,14 @@ void baricentrico(double& b1, double& b2, double& b3, double& xp, double& yp, in
     double y2 = malha->getVertex(malha->getCell(i)->getVertexId(1))->getCoord(1);
     double y3 = malha->getVertex(malha->getCell(i)->getVertexId(2))->getCoord(1);
     
+    
+    //ABC
+    double ABC = ((x1 * y2) + (x2 * y3) + (x3 * y1) − (x1 * y3) − (x3 * y2) − (x2 * y1)) * 0.5;
+    double ABP = ((x1 * y2) + (x2 * yp) + (xp * y1) − (x1 * yp) − (xp * y2) − (x2 * y1)) * 0.5;
+    double APC = ((x1 * yp) + (xp * y3) + (x3 * y1) − (x1 * y3) − (x3 * yp) − (xp * y1)) * 0.5;
+    double PBC = ((xp * y2) + (x2 * y3) + (x3 * yp) − (xp * y3) − (x3 * y2) − (x2 * yp)) * 0.5;
+    
     /*
-     //triangulo ABC
-     double AB = sqrt(pow(coord[0] - coord[2], 2) + pow(coord[1] - coord[3], 2));
-     double AC = sqrt(pow(coord[0] - coord[4], 2) + pow(coord[1] - coord[5], 2));
-     double BC = sqrt(pow(coord[2] - coord[4], 2) + pow(coord[3] - coord[5], 2));
-     double semiABC = (AB + BC + AC) / 2.0;
-     double ABC = 0.5 
-     double AB = Distance(coord[0], coord[2], coord[1], coord[3]);
-     double AC = Distance(coord[0], coord[4], coord[1], coord[5]);
-     double BC = Distance(coord[2], coord[4], coord[3], coord[5]);
-     double AP = Distance(coord[0], xp, coord[1], yp);
-     double BP = Distance(coord[2], xp, coord[3], yp);
-     double CP = Distance(xp, coord[4], yp, coord[5]);*/
-
-
-     //double semiABC = (AB + BC + AC) / 2.0;
-     //area = std::abs(x0 * (y1 - y2) + x1 * (y2 - y0) + x2 * (y0 - y1)) / 2;
-     double side_1=pow(pow((x2-x1), 2) + pow((y2-y1), 2), 0.5); /*Calculate length of side 1*/
-     double side_2=pow(pow((x3-x2), 2) + pow((y3-y2), 2), 0.5); /*Calculate length of side 2*/
-     double side_3=pow(pow((x3-x1), 2) + pow((y3-y1), 2), 0.5); /*Calculate length of side 3*/
- 
- 
-     double ABC = 0.25*pow(pow(pow(side_1, 2) + pow(side_2, 2) + pow(side_3, 2), 2) - 2*(pow(side_1, 4) + pow(side_2, 4) + pow(side_3, 4)), 0.5); /*Area of triangle using Heron's formula*/
- 
-     //Triangulo ABP
-     //double semiABP = (AB + BP + AP) / 2.0;
-     double side_1ABP=pow(pow((x2-x1), 2) + pow((y2-y1), 2), 0.5); /*Calculate length of side 1*/
-     double side_2ABP=pow(pow((xp-x2), 2) + pow((yp-y2), 2), 0.5); /*Calculate length of side 2*/
-     double side_3ABP=pow(pow((xp-x1), 2) + pow((yp-y1), 2), 0.5); /*Calculate length of side 3*/
-
-     double ABP = 0.25*pow(pow(pow(side_1ABP, 2) + pow(side_2ABP, 2) + pow(side_3ABP, 2), 2) - 2*(pow(side_1ABP, 4) + pow(side_2ABP, 4) + pow(side_3ABP, 4)), 0.5); /*Area of triangle using Heron's formula*/
-     
-     //Triangulo APC
-     //double semiAPC = (AC + CP + AP) / 2.0;
-     double side_1APC=pow(pow((xp-x1), 2) + pow((yp-y1), 2), 0.5); /*Calculate length of side 1*/
-     double side_2APC=pow(pow((x3-xp), 2) + pow((y3-yp), 2), 0.5); /*Calculate length of side 2*/
-     double side_3APC=pow(pow((x3-x1), 2) + pow((y3-y1), 2), 0.5); /*Calculate length of side 3*/
-
-     double APC = 0.25*pow(pow(pow(side_1APC, 2) + pow(side_2APC, 2) + pow(side_3APC, 2), 2) - 2*(pow(side_1APC, 4) + pow(side_2APC, 4) + pow(side_3APC, 4)), 0.5); /*Area of triangle using Heron's formula*/
-     
-     //Triangulo PBC
-     //double semiPBC = (CP + BP + BC) / 2.0;
-     double side_1PBC=pow(pow((x2-xp), 2) + pow((y2-yp), 2), 0.5); /*Calculate length of side 1*/
-     double side_2PBC=pow(pow((x3-x2), 2) + pow((y3-y2), 2), 0.5); /*Calculate length of side 2*/
-     double side_3PBC=pow(pow((x3-xp), 2) + pow((y3-yp), 2), 0.5); /*Calculate length of side 3*/
-
-     double PBC = 0.25*pow(pow(pow(side_1PBC, 2) + pow(side_2PBC, 2) + pow(side_3PBC, 2), 2) - 2*(pow(side_1PBC, 4) + pow(side_2PBC, 4) + pow(side_3PBC, 4)), 0.5); /*Area of triangle using Heron's formula*/
-     /*
  
 	//CALCULAR AS AREAS DOS TRIANGULOS
 	double ABC = 0.5*((coord[0]*coord[3])-(coord[1]*coord[2])+(coord[1]*coord[4])-(coord[0]*coord[5])+(coord[2]*coord[5])-(coord[3]*coord[4]));
