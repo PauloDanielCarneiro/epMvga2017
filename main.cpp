@@ -66,16 +66,17 @@ int type = 3;
 ////////////////////////////////////////////////////////////////////////
 
 //triangulo de busca
+bool Inicio = false;
 int id_atual = 255;
-void getInicio(bool clique_direito);
+void getInicio(bool Inicio);
 //double Distance(double dX0, double dY0, double dX1, double dY1);
 void baricentrico(double& b1, double& b2, double& b3, double& xp, double& yp, int i);
 void EP();
 
 //Identificar triangulo de inicio
-void getInicio(bool clique_direito)
+void getInicio(bool Inicio)
 {
-     if (clique_direito)
+     if (Inicio)
      {
 		int i = 0;
 		int celulas = malha->getNumberOfCells();
@@ -212,7 +213,7 @@ void RenderScene(void){
     Print->Face(malha->getCell(id_atual), red);
     
     //Localiza o triangulo inicial
-    getInicio(Interactor->getMouseRight());
+    getInicio(Inicio);
     //Realiza o exercicio proposto
     EP();
 
@@ -242,6 +243,7 @@ void HandleKeyboard(unsigned char key, int x, int y){
         break;
         case 'z':
             Interactor->getScreenPointOrigem();
+            Inicio = true;
         break;
         case 'x':
             Interactor->getScreenPointFinal();
