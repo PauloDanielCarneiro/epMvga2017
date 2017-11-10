@@ -14,14 +14,7 @@ double PX = 0.0;
 double PY = 0.0;
 double PXD = 0.0;
 double PYD = 0.0;
-
-bool scrInteractor::getMouseLeft(){
-	return this->mouse_left;
-}
-
-bool scrInteractor::getMouseRight(){
-	return this->mouse_right;
-}
+double captura[3];
 
 double scrInteractor::getPX(){
 	return PX;
@@ -39,7 +32,17 @@ double scrInteractor::getPYD(){
 	return PYD;
 }
 
+void getScreenPointOrigem(){
+	this->ScreenToPoint(this->pt_mouse, captura);
+	PXD = captura[0];
+	PYD = captura[1];
+}
 
+void getScreenPointFinal(){
+	this->ScreenToPoint(this->pt_mouse, captura);
+	PX = captura[0];
+	PY = captura[1];
+}
 /*====================== glButton ===================================*/
 
 /*===================================================================*/
