@@ -37,7 +37,8 @@ clock_t end_print;
 
 using namespace std;
 using namespace of;
-
+int xGlobal = 0;
+int yGlobal = 0;
 //Define o tamanho da tela.
 scrInteractor *Interactor = new scrInteractor(800, 600);
 //EP
@@ -66,17 +67,16 @@ int type = 3;
 ////////////////////////////////////////////////////////////////////////
 
 //triangulo de busca
-bool Inicio = false;
-int id_atual = 255;
-void getInicio(bool Inicio);
+int id_atual = 1;
+void getInicio(bool botao_direito);
 //double Distance(double dX0, double dY0, double dX1, double dY1);
 void baricentrico(double& b1, double& b2, double& b3, double& xp, double& yp, int i);
 void EP();
 
 //Identificar triangulo de inicio
-void getInicio(bool Inicio)
+void getInicio(bool botao_direito)
 {
-     if (Inicio)
+     if (botao_direito)
      {
 		int i = 0;
 		int celulas = malha->getNumberOfCells();
@@ -96,7 +96,7 @@ void getInicio(bool Inicio)
             //reseta fora do mapa
             else 
             {
-				id_atual = 255;
+				id_atual = 1;
 			}
 		i++;
         }
@@ -136,7 +136,8 @@ void EP(){
     double xp, yp; //coordenadas do ponto P
     xp = Interactor->getPX();
     yp = Interactor->getPY();
-    
+    TVertex v1;
+    TVertex v2
     //Primeiro triangulo
     int id = id_atual;
     // n~~ao imprimir se não tiver nenhuma alteração
@@ -166,17 +167,14 @@ void EP(){
               //CoordMenor: BC = 0, AC = 1, AB =2
               if (b1 < b2 && b1 < b3)
               {
-                 prox = malha->getCell(id)->getMateId(0);
                  CoordMenor = 0; //p está saindo de BC
               }
               if (b2 < b1 && b2 < b3)
               {
-                 prox = malha->getCell(id)->getMateId(1);
                  CoordMenor = 1; //p está saindo de AC
               }
               if (b3 < b1 && b3 < b2)
               {
-				 prox = malha->getCell(id)->getMateId(2);
                  CoordMenor = 2; //p está saindo de AB
               }
 
@@ -184,16 +182,23 @@ void EP(){
               if (prox == -1)
               {
 				switch(CoordMenor){
-					case 0:
-						Print->Edge(malha->getVertex(malha->getCell(id)->getVertexId(1)), malha->getVertex(malha->getCell(id)->getVertexId(2)), black, 3.0);
+                    case 0:
+                        prox = malha->getCell(id)->getMateId(0);
+                        v1 = malha->getVertex(malha->getCell(id)->getVertexId(1));
+                        v2 = malha->getVertex(malha->getCell(id)->getVertexId(2));
 						break;
 					case 1:
-						Print->Edge(malha->getVertex(malha->getCell(id)->getVertexId(0)), malha->getVertex(malha->getCell(id)->getVertexId(2)), black, 3.0);
+                        prox = malha->getCell(id)->getMateId(1);
+						v1 = malha->getVertex(malha->getCell(id)->getVertexId(0));
+                        v2 = malha->getVertex(malha->getCell(id)->getVertexId(2));
 						break;
 					case 2:
-						Print->Edge(malha->getVertex(malha->getCell(id)->getVertexId(0)), malha->getVertex(malha->getCell(id)->getVertexId(1)), black, 3.0);
+				        prox = malha->getCell(id)->getMateId(2);
+						v1 = malha->getVertex(malha->getCell(id)->getVertexId(0));
+                        v2 = malha->getVertex(malha->getCell(id)->getVertexId(1));
 						break;
-				}
+                    }
+                Print->Edge(v1, v2, black, 4.0);
               }
           }
           id = prox;
@@ -204,7 +209,7 @@ void EP(){
 
 
 
-//Exibe a tela
+//----[EP] M�TODO QUE DESENHA NA TELA----//
 void RenderScene(void){
 	allCommands->Execute();
 	
@@ -213,7 +218,7 @@ void RenderScene(void){
     Print->Face(malha->getCell(id_atual), red);
     
     //Localiza o triangulo inicial
-    getInicio(Inicio);
+    getInicio(Interactor->getMouseRight());
     //Realiza o exercicio proposto
     EP();
 
@@ -242,11 +247,8 @@ void HandleKeyboard(unsigned char key, int x, int y){
 			malha->addVertex(coords);
         break;
         case 'z':
-            Interactor->getScreenPointOrigem();
-            Inicio = true;
-        break;
-        case 'x':
-            Interactor->getScreenPointFinal();
+            xGlobal = x;
+            yGlobal = y;
         break;
 	}
     

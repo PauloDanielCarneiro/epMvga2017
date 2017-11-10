@@ -145,8 +145,8 @@ class scrInteractor
 		double getPY();
 		double getPXD();
 		double getPYD();
-		void getScreenPointFinal();
-		void getScreenPointOrigem();
+		bool getMouseLeft();
+		bool getMouseRight();
 
 		int view_list;
 		void Init_List();
