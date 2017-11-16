@@ -1,5 +1,3 @@
-#include<math.h>
-
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
@@ -37,8 +35,7 @@ clock_t end_print;
 
 using namespace std;
 using namespace of;
-int xGlobal = 0;
-int yGlobal = 0;
+
 //Define o tamanho da tela.
 scrInteractor *Interactor = new scrInteractor(800, 600);
 //EP
@@ -66,17 +63,18 @@ int type = 3;
 //CASO 3 EXECUTA ARVORE
 ////////////////////////////////////////////////////////////////////////
 
-//triangulo de busca
-int id_atual = 1;
-void getInicio(bool botao_direito);
-//double Distance(double dX0, double dY0, double dX1, double dY1);
+//[EP] ----VARIAVEL QUE CONTROLA O ID DO TRIANGULO INICIAL DE BUSCA----/
+int id_atual = 255;
+void getInicio(bool clique_direito);
 void baricentrico(double& b1, double& b2, double& b3, double& xp, double& yp, int i);
 void EP();
 
-//Identificar triangulo de inicio
-void getInicio(bool botao_direito)
+//[EP] ----REALIZA BUSCA EXAUSTIVA PARA IDENTIFICAR DEFINIR O TRIANGULO DE INICIO----/
+//Obs.: Poderia ser feita mudan�a na estrutura de Cell para incluir um campo visitada
+//e utilizar o algoritmo mais eficiente do EP
+void getInicio(bool clique_direito)
 {
-     if (botao_direito)
+     if (clique_direito)
      {
 		int i = 0;
 		int celulas = malha->getNumberOfCells();
@@ -87,60 +85,53 @@ void getInicio(bool botao_direito)
             double b1, b2, b3; //coordenadas baricentricas
             b1 = b2 = b3 = -1; //inicializar valores das coordenadas baricentricas arbitrariamente
             baricentrico(b1, b2, b3, xp, yp, i);
-            //Procura triangujlo clicado
+            //ATUALIZA E ENCERRA SE ENCONTRAR TRIANGULO NO PONTO CLICADO
             if (b1 > 0 && b2 > 0 && b3 > 0)
             {
 				id_atual = i;
                	return;
             }
-            //reseta fora do mapa
+            //CLIQUE FORA DO MAPA
             else 
             {
-				id_atual = 1;
+				id_atual = 255;
 			}
 		i++;
         }
      }
 }
-/*
-double Distance(double dX0, double dY0, double dX1, double dY1){
-    return sqrt(fabs(dX1 - dX0)*fabs(dX1 - dX0) + fabs(dY1 - dY0)*fabs(dY1 - dY0));
-}
-*/
 
 void baricentrico(double& b1, double& b2, double& b3, double& xp, double& yp, int i){
-    double coord[6];
-    int aux, aux2;
-    int contador = 0;
-    
-    for(aux = 0; aux <= 2; aux++){
-        for(aux2 = 0; aux2 <= 1; aux2++){
-            coord[contador] = malha->getVertex(malha->getCell(i)->getVertexId(aux))->getCoord(aux2);
-            contador++;
-        }
-    }
-  
-    double ABC = ((coord[0] * coord[3]) + (coord[2] * coord[5]) + (coord[4] * coord[1]) - (coord[0] * coord[5]) - (coord[4] * coord[3]) - (coord[2] * coord[1])) * 0.5;
-    double ABP = ((coord[0] * coord[3]) + (coord[2] * yp) + (xp * coord[1]) - (coord[0] * yp) - (xp * coord[3]) - (coord[2] * coord[1])) * 0.5;
-    double APC = ((coord[0] * yp) + (xp * coord[5]) + (coord[4] * coord[1]) - (coord[0] * coord[5]) - (coord[4] * yp) - (xp * coord[1])) * 0.5;
-    double PBC = ((xp * coord[3]) + (coord[2] * coord[5]) + (coord[4] * yp) - (xp * coord[5]) - (coord[4] * coord[3]) - (coord[2] * yp)) * 0.5;
-    
-	//Coordenadas baricentricas
+	double xa, ya, xb, yb, xc, yc; //coordenadas dos pontos do triangulo ABC
+	//OBTER AS COORDENADAS DOS PONTOS QUE FORMAM UM TRIANGULO----//
+	xa = malha->getVertex(malha->getCell(i)->getVertexId(0))->getCoord(0);
+	ya = malha->getVertex(malha->getCell(i)->getVertexId(0))->getCoord(1);
+	xb = malha->getVertex(malha->getCell(i)->getVertexId(1))->getCoord(0);
+	yb = malha->getVertex(malha->getCell(i)->getVertexId(1))->getCoord(1);
+	xc = malha->getVertex(malha->getCell(i)->getVertexId(2))->getCoord(0);
+	yc = malha->getVertex(malha->getCell(i)->getVertexId(2))->getCoord(1);
+	//CALCULAR AS AREAS DOS TRIANGULOS
+	double ABC = 0.5*((xa*yb)-(ya*xb)+(ya*xc)-(xa*yc)+(xb*yc)-(yb*xc));
+	double PBC = 0.5*((xp*yb)-(yp*xb)+(yp*xc)-(xp*yc)+(xb*yc)-(yb*xc));
+	double APC = 0.5*((xa*yp)-(ya*xp)+(ya*xc)-(xa*yc)+(xp*yc)-(yp*xc));
+	double ABP = 0.5*((xa*yb)-(ya*xb)+(ya*xp)-(xa*yp)+(xb*yp)-(yb*xp));
+	//DETERMINAR AS COORDENDAS BARICENTRICAS
 	b1 = PBC/ABC;
 	b2 = APC/ABC;
 	b3 = ABP/ABC;
 }
 
-//Resolução//
+//[EP] ----METODO QUE RESOLVE O PROBLEMA PROPOSTO-----------------------------//
 void EP(){
+     //----OBTER PONTOS DO CLIQUE DO MOUSE----/
     double xp, yp; //coordenadas do ponto P
     xp = Interactor->getPX();
     yp = Interactor->getPY();
-    TVertex v1;
-    TVertex v2
-    //Primeiro triangulo
+    
+    //----DEFINE O TRIANGULO INICIAL----//
     int id = id_atual;
-    // n~~ao imprimir se não tiver nenhuma alteração
+    
+    //NAO IMPRIMIR SE ESTIVER NO ESTADO INICIAL
     if (xp != 0.0 && yp != 0.0)
     {    
        double b1, b2, b3; //coordenadas baricentricas
@@ -148,13 +139,27 @@ void EP(){
 
        while (b1 <= 0 || b2 <= 0 || b3 <= 0)
        {
-          //imprimir caminho
+          //IMPRIMIR O TRIANGULO VISITADO
           Print->Face(malha->getCell(id), dgreen);
+          //----Impress�o o caminho no terminal----/
+          //cout<< id<<";";
           
           baricentrico(b1, b2, b3, xp, yp, id);
 
 
-          //Verificar se chegou no triangulo final
+          //[EP] ----VERIFICAR SE O PONTO PERTENCE AO TRIANGULO----//
+          /*
+            Definicao:
+            Se as coordenadas baricentricas forem todas positivas, o ponto pertence ao triangulo ABC:
+               if (bar1 > 0 && bar2 > 0 && bar3 > 0) { return true; }
+            Sen�o, o ponto est� na dire��o oposta � coordenada mais negativa.
+            Ou seja, primeiramente devemos verificar qual das coordenadas � a mais negativa:
+               if (bar1 < bar2 && bar1 < bar3) { CoordMenor = bar1; }
+               if (bar2 < bar1 && bar2 < bar3) { CoordMenor = bar2; }
+               if (bar3 < bar1 && bar3 < bar2) { CoordMenor = bar3; }
+          */
+    
+          //ENCERRAR SE CHEGOU AO TRIANGULO DESEJADO
           int prox, CoordMenor;          
           //Verifica se coordenadas são positivas
           if (b1 > 0 && b2 > 0 && b3 > 0)
@@ -167,38 +172,35 @@ void EP(){
               //CoordMenor: BC = 0, AC = 1, AB =2
               if (b1 < b2 && b1 < b3)
               {
+                 prox = malha->getCell(id)->getMateId(0);
                  CoordMenor = 0; //p está saindo de BC
               }
               if (b2 < b1 && b2 < b3)
               {
+                 prox = malha->getCell(id)->getMateId(1);
                  CoordMenor = 1; //p está saindo de AC
               }
               if (b3 < b1 && b3 < b2)
               {
+				 prox = malha->getCell(id)->getMateId(2);
                  CoordMenor = 2; //p está saindo de AB
               }
 
               //Verifica se chegou na borda
               if (prox == -1)
               {
+				  //IMPRIME A ARESTA POR ONDE SAIU - 3 CASOS
 				switch(CoordMenor){
-                    case 0:
-                        prox = malha->getCell(id)->getMateId(0);
-                        v1 = malha->getVertex(malha->getCell(id)->getVertexId(1));
-                        v2 = malha->getVertex(malha->getCell(id)->getVertexId(2));
+					case 0:
+						Print->Edge(malha->getVertex(malha->getCell(id)->getVertexId(1)), malha->getVertex(malha->getCell(id)->getVertexId(2)), black, 3.0);
 						break;
 					case 1:
-                        prox = malha->getCell(id)->getMateId(1);
-						v1 = malha->getVertex(malha->getCell(id)->getVertexId(0));
-                        v2 = malha->getVertex(malha->getCell(id)->getVertexId(2));
+						Print->Edge(malha->getVertex(malha->getCell(id)->getVertexId(0)), malha->getVertex(malha->getCell(id)->getVertexId(2)), black, 3.0);
 						break;
 					case 2:
-				        prox = malha->getCell(id)->getMateId(2);
-						v1 = malha->getVertex(malha->getCell(id)->getVertexId(0));
-                        v2 = malha->getVertex(malha->getCell(id)->getVertexId(1));
+						Print->Edge(malha->getVertex(malha->getCell(id)->getVertexId(0)), malha->getVertex(malha->getCell(id)->getVertexId(1)), black, 3.0);
 						break;
-                    }
-                Print->Edge(v1, v2, black, 4.0);
+				}
               }
           }
           id = prox;
@@ -213,13 +215,61 @@ void EP(){
 void RenderScene(void){
 	allCommands->Execute();
 	
+	//[EP] OBS: o que aparece primeiro � pintado por cima
 	Print->Vertices(malha,blue,3);
-	//[EP] Mostra o inicio
-    Print->Face(malha->getCell(id_atual), red);
+	//[EP] IMPRIME A FACE ON VAI INICIAR O PERCURSO
+    Print->Face(malha->getCell(id_atual), yellow);
+
+
+    //[EP] ----METODOS DE IMPRESSAO QUE FORAM UTILIZADOS NO DESENVOLVIMENTO----/
+    /*
+	/----IMPRIME OS NUMEROS DOS VERTICES E TRIANGULOS----/
+    Print->CellsIds(malha, green); //Imprime o ID de todas as c�lulas
+	Print->VerticesIds(malha, blue); //Imprime os IDs dos v�rtices
     
-    //Localiza o triangulo inicial
+    /----EXEMPLOS DE IMPRESSAO DE ARESTAS----/
+    Print->Edge(malha->getVertex(0), malha->getVertex(1), blue, 10.0);
+    Print->Edge(1, 2, blue, 10.0);
+    
+	/----METODO QUE PINTA AS FACES DOS TRI�NGULOS DAS FRONTEIRAS----/
+	//Obs.: Fronteiras s�o os tri�ngulos cujo MateId de alguma das arestas � igual a -1
+	int i;
+	for(i = 0; i < malha->getNumberOfCells(); i++)
+	{
+          if(malha->getCell(i)->getMateId(0) == -1)
+          {
+              Print->Face(malha->getCell(i), red);
+              continue;
+          }
+          if(malha->getCell(i)->getMateId(1) == -1)
+          {
+              Print->Face(malha->getCell(i), red);
+              continue;
+          }
+          if(malha->getCell(i)->getMateId(2) == -1)
+          {
+              Print->Face(malha->getCell(i), red);
+              continue;
+          }
+    }
+    /----PEGAR O ID DO VERTICE N DA CELULA #----/
+    //Obs.: cada celula/triangulo tem possui os vertices 0, 1 e 2;
+    int m = malha->getCell(255)->getVertexId(0); //Peguei O ID do V�rtice 0 da c�lula 255
+    /----ROTINA DE IMPRESS�O DAS COORDENADAS A, B, C DE UM TRIANGULO DADO - EX.: 255----/
+    int j;
+    int k = 0;
+    for (j = 0; j < 6; j++)
+    {
+        k = j/2;
+        int d = malha->getCell(255)->getVertexId(k);
+        cout<< d <<"," <<ct[j] <<endl;
+    }
+    */
+    //[FIM]
+    
+    //[EP] ----CHAMA METODO EXAUSTIVO PARA ATUALIZAR TRIANGULO INICIAL----//
     getInicio(Interactor->getMouseRight());
-    //Realiza o exercicio proposto
+    //[EP] ----IMPRIME CAMINHO POR COORDENADAS BARICENTRICAS----//
     EP();
 
 	Print->FacesWireframe(malha,grey,3);
@@ -245,11 +295,7 @@ void HandleKeyboard(unsigned char key, int x, int y){
 			coords[1]=-y;
 			coords[2]=0.0;
 			malha->addVertex(coords);
-        break;
-        case 'z':
-            xGlobal = x;
-            yGlobal = y;
-        break;
+		break;
 	}
     
 	Interactor->Refresh_List();
