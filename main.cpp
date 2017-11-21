@@ -136,8 +136,8 @@ void EP(){
     double xp, yp; //coordenadas do ponto P
     xp = Interactor->getPX();
     yp = Interactor->getPY();
-    TVertex v1;
-    TVertex v2
+    double v1;
+    double v2
     //Primeiro triangulo
     int id = id_atual;
     // n~~ao imprimir se não tiver nenhuma alteração
@@ -184,18 +184,18 @@ void EP(){
 				switch(CoordMenor){
                     case 0:
                         prox = malha->getCell(id)->getMateId(0);
-                        v1 = malha->getVertex(malha->getCell(id)->getVertexId(1));
-                        v2 = malha->getVertex(malha->getCell(id)->getVertexId(2));
+                        v1 = malha->getVertex(malha->getCell(id)->getVertexId(1))->getCoord();
+                        v2 = malha->getVertex(malha->getCell(id)->getVertexId(2))->getCoord();
 						break;
 					case 1:
                         prox = malha->getCell(id)->getMateId(1);
-						v1 = malha->getVertex(malha->getCell(id)->getVertexId(0));
-                        v2 = malha->getVertex(malha->getCell(id)->getVertexId(2));
+						v1 = malha->getVertex(malha->getCell(id)->getVertexId(0))->getCoord();
+                        v2 = malha->getVertex(malha->getCell(id)->getVertexId(2))->getCoord();
 						break;
 					case 2:
 				        prox = malha->getCell(id)->getMateId(2);
-						v1 = malha->getVertex(malha->getCell(id)->getVertexId(0));
-                        v2 = malha->getVertex(malha->getCell(id)->getVertexId(1));
+						v1 = malha->getVertex(malha->getCell(id)->getVertexId(0))->getCoord();
+                        v2 = malha->getVertex(malha->getCell(id)->getVertexId(1))->getCoord();
 						break;
                     }
                 Print->Edge(v1, v2, black, 4.0);
