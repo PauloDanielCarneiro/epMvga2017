@@ -141,7 +141,7 @@ void EP(){
        while (b1 <= 0 || b2 <= 0 || b3 <= 0)
        {
           //imprime triangulo que passou
-          Print->Face(malha->getCell(id), dgreen);
+          Print->Face(malha->getCell(id), black);
           //----Impress�o o caminho no terminal----/
           //cout<< id<<";";
           
@@ -211,7 +211,7 @@ void RenderScene(void){
 	//[EP] OBS: o que aparece primeiro � pintado por cima
 	Print->Vertices(malha,blue,3);
 	//imprime qual o primeiro triangulo
-    Print->Face(malha->getCell(id_atual), yellow);
+    Print->Face(malha->getCell(id_atual), dblue);
 
 
     //pega a coordenada
