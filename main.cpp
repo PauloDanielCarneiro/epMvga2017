@@ -66,7 +66,6 @@ int type = 3;
 //[EP] ----VARIAVEL QUE CONTROLA O ID DO TRIANGULO INICIAL DE BUSCA----/
 int id_atual = 255;
 void getInicio(bool clique_direito);
-void baricentrico(double& b1, double& b2, double& b3, double& xp, double& yp, int i);
 void EP();
 
 //Busca pelo inicio do problema
@@ -76,13 +75,28 @@ void getInicio(bool clique_direito)
      {
 		int i = 0;
 		int celulas = malha->getNumberOfCells();
-	    while (i < celulas)
+	    for (i = 0; i < celulas; i++)
 	    {
             double xp = Interactor->getPXD(); //coordenada x
             double yp = Interactor->getPYD(); //coordenada y
             double b1, b2, b3; //coordenadas baricentricas
             b1 = b2 = b3 = -1; //inicializar valores das coordenadas baricentricas arbitrariamente
-            baricentrico(b1, b2, b3, xp, yp, i);
+            double xa, ya, xb, yb, xc, yc; 
+			xa = malha->getVertex(malha->getCell(i)->getVertexId(0))->getCoord(0);
+			ya = malha->getVertex(malha->getCell(i)->getVertexId(0))->getCoord(1);
+			xb = malha->getVertex(malha->getCell(i)->getVertexId(1))->getCoord(0);
+			yb = malha->getVertex(malha->getCell(i)->getVertexId(1))->getCoord(1);
+			xc = malha->getVertex(malha->getCell(i)->getVertexId(2))->getCoord(0);
+			yc = malha->getVertex(malha->getCell(i)->getVertexId(2))->getCoord(1);
+			
+			double ABC = 0.5*((xa*yb)-(ya*xb)+(ya*xc)-(xa*yc)+(xb*yc)-(yb*xc));
+			double PBC = 0.5*((xp*yb)-(yp*xb)+(yp*xc)-(xp*yc)+(xb*yc)-(yb*xc));
+			double APC = 0.5*((xa*yp)-(ya*xp)+(ya*xc)-(xa*yc)+(xp*yc)-(yp*xc));
+			double ABP = 0.5*((xa*yb)-(ya*xb)+(ya*xp)-(xa*yp)+(xb*yp)-(yb*xp));
+			
+			b1 = PBC/ABC;
+			b2 = APC/ABC;
+			b3 = ABP/ABC;
             if (b1 > 0 && b2 > 0 && b3 > 0)
             {
 				id_atual = i;
@@ -93,29 +107,10 @@ void getInicio(bool clique_direito)
             {
 				id_atual = 255;
 			}
-		i++;
         }
      }
 }
 
-void baricentrico(double& b1, double& b2, double& b3, double& xp, double& yp, int i){
-	double xa, ya, xb, yb, xc, yc; 
-	xa = malha->getVertex(malha->getCell(i)->getVertexId(0))->getCoord(0);
-	ya = malha->getVertex(malha->getCell(i)->getVertexId(0))->getCoord(1);
-	xb = malha->getVertex(malha->getCell(i)->getVertexId(1))->getCoord(0);
-	yb = malha->getVertex(malha->getCell(i)->getVertexId(1))->getCoord(1);
-	xc = malha->getVertex(malha->getCell(i)->getVertexId(2))->getCoord(0);
-	yc = malha->getVertex(malha->getCell(i)->getVertexId(2))->getCoord(1);
-	
-	double ABC = 0.5*((xa*yb)-(ya*xb)+(ya*xc)-(xa*yc)+(xb*yc)-(yb*xc));
-	double PBC = 0.5*((xp*yb)-(yp*xb)+(yp*xc)-(xp*yc)+(xb*yc)-(yb*xc));
-	double APC = 0.5*((xa*yp)-(ya*xp)+(ya*xc)-(xa*yc)+(xp*yc)-(yp*xc));
-	double ABP = 0.5*((xa*yb)-(ya*xb)+(ya*xp)-(xa*yp)+(xb*yp)-(yb*xp));
-	
-	b1 = PBC/ABC;
-	b2 = APC/ABC;
-	b3 = ABP/ABC;
-}
 
 //ep
 void EP(){
@@ -130,7 +125,7 @@ void EP(){
        double b1, b2, b3; //coordenadas baricentricas
        b1 = b2 = b3 = -1; //inicializar valores das coordenadas baricentricas arbitrariamente
 
-       while (b1 <= 0 || b2 <= 0 || b3 <= 0)
+       for (;b1 <= 0 || b2 <= 0 || b3 <= 0;)
        {    
           Print->Face(malha->getCell(id), dgreen);
           

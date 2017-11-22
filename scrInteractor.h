@@ -141,10 +141,10 @@ class scrInteractor
 		bool WriteScreenImage();
 		
 		//EP
-		double getPX();
-		double getPY();
-		double getPXD();
-		double getPYD();
+		double pegarPontoX();
+		double pegarPontoY();
+		double pegarPontoXD();
+		double pegarPontoYD();
 		bool getMouseLeft();
 		bool getMouseRight();
 

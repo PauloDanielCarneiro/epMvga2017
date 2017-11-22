@@ -23,19 +23,19 @@ bool scrInteractor::getMouseRight(){
 	return this->mouse_right;
 }
 
-double scrInteractor::getPX(){
+double scrInteractor::pegarPontoX(){
 	return PX;
 }
 
-double scrInteractor::getPY(){
+double scrInteractor::pegarPontoY(){
 	return PY;
 }
 
-double scrInteractor::getPXD(){
+double scrInteractor::pegarPontoXD(){
 	return PXD;
 }
 
-double scrInteractor::getPYD(){
+double scrInteractor::pegarPontoYD(){
 	return PYD;
 }
 
